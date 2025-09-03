@@ -1,0 +1,236 @@
+@model IEnumerable<HotelBooking.Models.Property>
+
+@{
+    ViewData["Title"] = "Cơ sở lưu trú của bạn";
+}
+
+<div class="container py-2">
+    <!-- Header Section -->
+    <div class="d-flex justify-content-between align-items-center mb-2">
+        <div>
+            <h1 class="h4 mb-0 fw-bold text-dark">Cơ sở lưu trú của bạn</h1>
+            <p class="text-muted mb-0 small">Quản lý tất cả cơ sở lưu trú của bạn tại đây</p>
+        </div>
+        <div class="d-flex gap-1">
+            <a asp-action="RegisterNewProperty" class="btn btn-primary btn-sm">
+                <i class="bi bi-plus-circle me-1"></i>Đăng ký mới
+            </a>
+        </div>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="text-center py-5">
+            <i class="bi bi-building display-1 text-muted"></i>
+            <h3 class="mt-3 text-muted">Chưa có cơ sở lưu trú nào</h3>
+            <p class="text-muted">Bắt đầu đăng ký cơ sở lưu trú đầu tiên của bạn</p>
+            <a asp-action="RegisterNewProperty" class="btn btn-primary">
+                <i class="bi bi-plus-circle me-2"></i>Đăng ký cơ sở lưu trú
+            </a>
+        </div>
+    }
+    else
+    {
+        <!-- Properties Grid -->
+        <div class="row g-2">
+            @foreach (var property in Model)
+            {
+                <div class="col-lg-4 col-md-6">
+                    <div class="property-card h-100 d-flex flex-column">
+                        <div class="property-card-header">
+                            <div class="property-status-badge">
+                                @switch (property.Status)
+                                {
+                                    case PropertyStatus.Draft:
+                                        <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary">
+                                            <i class="bi bi-pencil me-1"></i>Bản nháp
+                                        </span>
+                                        break;
+                                    case PropertyStatus.Submitted:
+                                        <span class="badge bg-info bg-opacity-10 text-info border border-info">
+                                            <i class="bi bi-send me-1"></i>Đã gửi
+                                        </span>
+                                        break;
+                                    case PropertyStatus.UnderReview:
+                                        <span class="badge bg-warning bg-opacity-10 text-warning border border-warning">
+                                            <i class="bi bi-clock me-1"></i>Đang xem xét
+                                        </span>
+                                        break;
+                                    case PropertyStatus.Approved:
+                                        <span class="badge bg-success bg-opacity-10 text-success border border-success">
+                                            <i class="bi bi-check-circle me-1"></i>Đã phê duyệt
+                                        </span>
+                                        break;
+                                    case PropertyStatus.Rejected:
+                                        <span class="badge bg-danger bg-opacity-10 text-danger border border-danger">
+                                            <i class="bi bi-x-circle me-1"></i>Bị từ chối
+                                        </span>
+                                        break;
+                                }
+                            </div>
+                        </div>
+
+                        <div class="property-card-body flex-grow-1">
+                            <h6 class="property-name mb-1">@property.Name</h6>
+
+                            <div class="property-info mb-2">
+                                <div class="info-item">
+                                    <i class="bi bi-geo-alt text-muted me-1"></i>
+                                    @if (!string.IsNullOrEmpty(property.AddressLine))
+                                    {
+                                        <span class="text-dark small">@property.AddressLine</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted small">Chưa có địa chỉ</span>
+                                    }
+                                </div>
+                                @if (!string.IsNullOrEmpty(property.City))
+                                {
+                                    <div class="info-item">
+                                        <i class="bi bi-building text-muted me-1"></i>
+                                        <span class="text-dark small">@property.City</span>
+                                    </div>
+                                }
+                                <div class="info-item">
+                                    <i class="bi bi-calendar3 text-muted me-1"></i>
+                                    <span class="text-muted small">Tạo ngày: @property.CreatedAt.ToString("dd/MM/yyyy")</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="property-card-footer mt-auto">
+                            @if (property.Status == PropertyStatus.Draft)
+                            {
+                                <a asp-action="PropertyDetail" asp-route-id="@property.Id"
+                                    class="btn btn-outline-primary btn-sm w-100">
+                                    <i class="bi bi-pencil me-1"></i>Tiếp tục đăng ký
+                                </a>
+                            }
+                            else
+                            {
+                                <a asp-action="PropertyDetail" asp-route-id="@property.Id"
+                                    class="btn btn-outline-secondary btn-sm w-100">
+                                    <i class="bi bi-eye me-1"></i>Xem & Chỉnh sửa
+                                </a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+<style>
+    .property-card {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 1px 6px rgba(0, 0, 0, 0.04);
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+        overflow: hidden;
+        min-height: 200px;
+    }
+
+    .property-card:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    }
+
+    .property-card-header {
+        padding: 0.5rem 0.75rem 0;
+    }
+
+    .property-card-body {
+        padding: 0 0.75rem;
+        flex: 1;
+    }
+
+    .property-card-footer {
+        padding: 0.5rem 0.75rem;
+        border-top: 1px solid rgba(0, 0, 0, 0.05);
+        background: rgba(0, 0, 0, 0.02);
+    }
+
+    .property-name {
+        font-weight: 600;
+        color: #2c3e50;
+        line-height: 1.2;
+        font-size: 0.9rem;
+    }
+
+    .property-info {
+        display: flex;
+        flex-direction: column;
+        gap: 0.15rem;
+    }
+
+    .info-item {
+        display: flex;
+        align-items: center;
+        font-size: 0.7rem;
+    }
+
+    .info-item i {
+        font-size: 0.7rem;
+        width: 12px;
+    }
+
+    .badge {
+        font-size: 0.6rem;
+        font-weight: 500;
+        padding: 0.2rem 0.4rem;
+        border-radius: 10px;
+    }
+
+    .badge i {
+        font-size: 0.6rem;
+    }
+
+    .btn {
+        border-radius: 4px;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        height: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+    }
+
+    .btn i {
+        font-size: 0.7rem;
+    }
+
+    @@media (max-width: 768px) {
+        .property-card {
+            min-height: 180px;
+        }
+
+        .property-card-header {
+            padding: 0.4rem 0.6rem 0;
+        }
+
+        .property-card-body {
+            padding: 0 0.6rem;
+        }
+
+        .property-card-footer {
+            padding: 0.4rem 0.6rem;
+        }
+
+        .property-name {
+            font-size: 0.85rem;
+        }
+
+        .info-item {
+            font-size: 0.65rem;
+        }
+
+        .btn {
+            height: 26px;
+            font-size: 0.7rem;
+        }
+    }
+</style>

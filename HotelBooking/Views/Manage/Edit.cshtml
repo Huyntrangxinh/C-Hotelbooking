@@ -1,0 +1,28 @@
+﻿@model HotelBooking.Models.EditProfileVM
+@{
+    ViewData["Title"] = "Chỉnh sửa hồ sơ";
+}
+<h2 class="mb-3">Chỉnh sửa hồ sơ</h2>
+
+<form asp-action="Edit" method="post" class="col-12 col-md-6 p-0">
+    @Html.AntiForgeryToken()
+
+    <div class="mb-3">
+        <label asp-for="FullName" class="form-label"></label>
+        <input asp-for="FullName" class="form-control" />
+        <span asp-validation-for="FullName" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="DateOfBirth" class="form-label"></label>
+        <input asp-for="DateOfBirth" class="form-control" />
+        <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Lưu</button>
+    <a asp-action="Index" class="btn btn-link">Huỷ</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

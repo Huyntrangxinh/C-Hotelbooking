@@ -1,0 +1,341 @@
+@model HotelBooking.ViewModels.PropertyContractViewModel
+@{
+    ViewData["Title"] = "Thông tin hợp đồng";
+}
+<link rel="stylesheet" href="~/css/site.css" />
+
+<section class="tera-form py-4">
+    <div class="container-xxl" style="max-width:1120px">
+        <div class="row g-4">
+
+            <!-- Sidebar -->
+            <aside class="col-lg-3">
+                <div class="step-nav card card-slim sticky-top" style="top:12px;">
+                    <div class="card-body p-0">
+                        <div class="step-title">Tổng quan về cơ sở lưu trú</div>
+                        <ul class="wizard-steps">
+                            <li><a href="@Url.Action("Onboarding", "Partner", new { propertyId = Model.PropertyId })">Thông
+                                    tin về cơ sở lưu trú</a></li>
+                            <li><a href="@Url.Action("Onboarding", "Partner", new { propertyId = Model.PropertyId })">Địa
+                                    chỉ cơ sở lưu trú</a></li>
+                            <li><a href="@Url.Action("Onboarding", "Partner", new { propertyId = Model.PropertyId })">Thông
+                                    tin liên hệ với cơ sở lưu trú</a></li>
+                        </ul>
+                        <div class="step-title">Thanh toán</div>
+                        <ul class="wizard-steps">
+                            <li><a href="@Url.Action("Payment", "Partner", new { propertyId = Model.PropertyId })">Thanh
+                                    toán</a></li>
+                        </ul>
+                        <div class="step-title">Hợp đồng</div>
+                        <ul class="wizard-steps">
+                            <li class="active"><a href="#contract-section">Hợp đồng</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Content -->
+            <div class="col-lg-9">
+                <form asp-action="Contract" method="post" enctype="multipart/form-data">
+                    <input type="hidden" asp-for="PropertyId" />
+
+                    <!-- (Optional UI) Quyền sở hữu doanh nghiệp – chỉ là trình bày, không đổi logic -->
+                    <div id="contract-section" class="panel mb-4">
+                        <div class="panel-body">
+                            <h5 class="panel-title">Quyền sở hữu doanh nghiệp</h5>
+                            <div class="d-flex gap-4 flex-wrap">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="ownerType" id="ownerCompany"
+                                        checked>
+                                    <label class="form-check-label" for="ownerCompany">
+                                        Sở hữu doanh nghiệp có Mã số thuế công ty đã đăng ký
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="ownerType" id="ownerPersonal">
+                                    <label class="form-check-label" for="ownerPersonal">
+                                        Sở hữu cá nhân có Mã số thuế cá nhân
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Thông tin pháp nhân -->
+                    <div class="panel mb-4">
+                        <div class="panel-body">
+                            <h5 class="panel-title">Thông tin pháp nhân</h5>
+
+                            <div class="mb-3">
+                                <label asp-for="LegalEntityName" class="form-label"></label>
+                                <input asp-for="LegalEntityName" class="form-control form-control-sm" />
+                                <span asp-validation-for="LegalEntityName" class="text-danger small"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="LegalEntityAddress" class="form-label"></label>
+                                <input asp-for="LegalEntityAddress" class="form-control form-control-sm" />
+                                <span asp-validation-for="LegalEntityAddress" class="text-danger small"></span>
+                            </div>
+
+                            <div class="mb-0">
+                                <label asp-for="BusinessLicenseFile" class="form-label">Giấy phép kinh doanh (Tùy
+                                    chọn)</label>
+                                <div class="d-flex gap-2">
+                                    <input asp-for="BusinessLicenseFile" type="file"
+                                        class="form-control form-control-sm" />
+                                    <button type="button" class="btn btn-primary btn-sm">Tải lên</button>
+                                </div>
+                                @if (!string.IsNullOrEmpty(Model.ExistingBusinessLicensePath))
+                                {
+                                    <div class="small text-muted mt-1">File hiện tại:
+                                        <a href="@Model.ExistingBusinessLicensePath" target="_blank">Xem file</a>
+                                    </div>
+                                }
+                                <div class="alert-soft mt-2">
+                                    <i class="bi bi-info-circle me-2"></i>
+                                    <span class="small">
+                                        Ở Việt Nam, giấy phép kinh doanh (Giấy Phép Kinh Doanh) là bắt buộc để xác minh
+                                        tính hợp pháp của hoạt động kinh doanh.
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Thông tin thuế công ty -->
+                    <div class="panel mb-4">
+                        <div class="panel-body">
+                            <h5 class="panel-title">Thông tin thuế công ty</h5>
+                            <div class="mb-3">
+                                <label asp-for="TaxPayerName" class="form-label"></label>
+                                <input asp-for="TaxPayerName" class="form-control form-control-sm" />
+                                <span asp-validation-for="TaxPayerName" class="text-danger small"></span>
+                            </div>
+                            <div class="mb-0">
+                                <label asp-for="TaxPayerAddress" class="form-label"></label>
+                                <input asp-for="TaxPayerAddress" class="form-control form-control-sm" />
+                                <span asp-validation-for="TaxPayerAddress" class="text-danger small"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Thông tin người ký -->
+                    <div class="panel mb-5">
+                        <div class="panel-body">
+                            <h5 class="panel-title">Thông tin người ký</h5>
+
+                            <div class="mb-3">
+                                <div class="d-flex gap-4 flex-wrap">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" asp-for="IsSignatoryDirector"
+                                            value="true" id="isDirectorYes" />
+                                        <label class="form-check-label" for="isDirectorYes">Giám đốc công ty</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" asp-for="IsSignatoryDirector"
+                                            value="false" id="isDirectorNo" />
+                                        <label class="form-check-label" for="isDirectorNo">Người được uỷ quyền
+                                            khác</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="divider-soft mb-3"></div>
+
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label asp-for="SignatoryName" class="form-label">Họ tên đầy đủ của chủ sở hữu cơ sở
+                                        lưu trú</label>
+                                    <input asp-for="SignatoryName" class="form-control form-control-sm" />
+                                    <span asp-validation-for="SignatoryName" class="text-danger small"></span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label asp-for="SignatoryPosition" class="form-label">Vị trí</label>
+                                    <input asp-for="SignatoryPosition" class="form-control form-control-sm" />
+                                    <span asp-validation-for="SignatoryPosition" class="text-danger small"></span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label asp-for="SignatoryPhoneNumber" class="form-label">Số điện thoại</label>
+                                    <input asp-for="SignatoryPhoneNumber" class="form-control form-control-sm" />
+                                    <span asp-validation-for="SignatoryPhoneNumber" class="text-danger small"></span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label asp-for="SignatoryEmail" class="form-label">Địa chỉ email</label>
+                                    <input asp-for="SignatoryEmail" class="form-control form-control-sm" />
+                                    <span asp-validation-for="SignatoryEmail" class="text-danger small"></span>
+                                </div>
+                                <div class="col-12">
+                                    <label asp-for="SignatoryIdCardFile" class="form-label">Thẻ CCCD của Chủ sở hữu cơ
+                                        sở lưu trú</label>
+                                    <div class="d-flex gap-2">
+                                        <input asp-for="SignatoryIdCardFile" type="file"
+                                            class="form-control form-control-sm" />
+                                        <button type="button" class="btn btn-primary btn-sm">Tải lên</button>
+                                    </div>
+                                    @if (!string.IsNullOrEmpty(Model.ExistingSignatoryIdCardPath))
+                                    {
+                                        <div class="small text-muted mt-1">File hiện tại:
+                                            <a href="@Model.ExistingSignatoryIdCardPath" target="_blank">Xem file</a>
+                                        </div>
+                                    }
+                                    <div class="small text-muted mt-1">
+                                        Bạn có thể tải lên tệp tin JPG, GIF hoặc PNG (tối đa: 4MB). Đối với giấy tờ
+                                        chứng minh địa chỉ (POA), vui lòng tải lên tệp PDF.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sticky footer -->
+                    <div class="onb-sticky">
+                        <div class="d-flex justify-content-between">
+                            <a asp-action="Payment" asp-route-propertyId="@Model.PropertyId"
+                                class="btn btn-outline-secondary btn-sm">Quay lại trang trước</a>
+                            <button type="submit" class="btn btn-warning btn-sm px-4">Tiếp tục Xem lại hợp đồng</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    /* ====== Compact Traveloka-like look ====== */
+    .tera-form {
+        font-size: 14px
+    }
+
+    /* Panel styling */
+    .panel {
+        border: 1px solid #e7edf8;
+        border-radius: 14px;
+        background: #fff;
+        box-shadow: 0 1px 0 rgba(16, 24, 40, .04)
+    }
+
+    .panel-body {
+        padding: 18px
+    }
+
+    .panel-title {
+        margin-bottom: 12px;
+        font-weight: 600
+    }
+
+    .form-control.form-control-sm,
+    .form-select.form-select-sm {
+        height: 40px;
+        padding: .35rem .75rem;
+        border-radius: 10px;
+        border-color: #d7e0f1;
+        font-size: 14px
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        box-shadow: 0 0 0 .2rem rgba(13, 110, 253, .12);
+        border-color: #9bbcff
+    }
+
+    /* ===== Sidebar (giống Onboarding) ===== */
+    .step-nav.card {
+        border: none;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .step-nav .card-body {
+        padding: 0;
+    }
+
+    /* Header nhóm dạng "pill" + chevron */
+    .step-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 16px;
+        margin: 0 0 10px 0;
+        background: #fff;
+        border: 1px solid #eef1f5;
+        border-radius: 28px;
+        font-weight: 700;
+        color: #111827;
+        box-shadow: 0 2px 8px rgba(13, 110, 253, .06);
+    }
+
+    .step-title::after {
+        content: "";
+        width: 16px;
+        height: 16px;
+        flex: 0 0 16px;
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'><path fill='%236c757d' d='M6 3l5 5-5 5z'/></svg>");
+        background-size: 16px 16px;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+
+    .wizard-steps {
+        list-style: none;
+        margin: 0 0 12px 0;
+        padding: .25rem 0 .75rem 12px;
+    }
+
+    .wizard-steps li {
+        padding: .4rem 1rem;
+        border-left: 3px solid transparent;
+        border-radius: 10px;
+    }
+
+    .wizard-steps li:hover {
+        background: #f6f8fb;
+    }
+
+    .wizard-steps a {
+        text-decoration: none;
+        color: #495057;
+        display: block;
+    }
+
+    /* Mục đang active: chữ xanh + vạch xanh bên trái */
+    .wizard-steps li.active {
+        background: #f8f9fb;
+        border-left-color: #0d6efd;
+    }
+
+    .wizard-steps li.active a {
+        color: #0d6efd;
+        font-weight: 600;
+    }
+
+    /* helpers */
+    .alert-soft {
+        border: 1px solid #d7e8ff;
+        background: #eef5ff;
+        border-radius: 10px;
+        padding: .6rem .75rem
+    }
+
+    .divider-soft {
+        height: 1px;
+        background: #e9eef5
+    }
+
+    .onb-sticky {
+        position: sticky;
+        bottom: 0;
+        background: #fff;
+        border-top: 1px solid #e9ecef;
+        padding: 10px 0;
+        z-index: 50;
+        box-shadow: 0 -2px 8px rgba(16, 24, 40, .05)
+    }
+
+    .btn.btn-warning.btn-sm,
+    .btn-outline-secondary.btn-sm {
+        border-radius: 10px
+    }
+</style>

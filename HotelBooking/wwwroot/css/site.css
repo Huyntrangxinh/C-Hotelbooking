@@ -1,0 +1,805 @@
+﻿:root {
+    --brand: #01357f;
+    --brand-2: #00224f;
+    --accent: #febb02;
+    --save-button: #FF5E20;
+    --save-button-hover: #e5551d;
+}
+
+/* ========== Global Button Styling ========== */
+.btn-primary,
+.btn-success,
+.btn-info,
+.btn-warning,
+.btn-danger,
+.btn-dark,
+.btn-outline-primary,
+.btn-outline-success,
+.btn-outline-info,
+.btn-outline-warning,
+.btn-outline-danger,
+.btn-outline-dark,
+button[type="submit"],
+input[type="submit"] {
+    background-color: var(--brand) !important;
+    border-color: var(--brand) !important;
+    color: white !important;
+}
+
+.btn-primary:hover,
+.btn-success:hover,
+.btn-info:hover,
+.btn-warning:hover,
+.btn-danger:hover,
+.btn-dark:hover,
+.btn-outline-primary:hover,
+.btn-outline-success:hover,
+.btn-outline-info:hover,
+.btn-outline-warning:hover,
+.btn-outline-danger:hover,
+.btn-outline-dark:hover,
+button[type="submit"]:hover,
+input[type="submit"]:hover {
+    background-color: #012a66 !important;
+    border-color: #012a66 !important;
+    color: white !important;
+}
+
+.btn-primary:focus,
+.btn-success:focus,
+.btn-info:focus,
+.btn-warning:focus,
+.btn-danger:focus,
+.btn-dark:focus,
+.btn-outline-primary:focus,
+.btn-outline-success:focus,
+.btn-outline-info:focus,
+.btn-outline-warning:focus,
+.btn-outline-danger:focus,
+.btn-outline-dark:focus,
+button[type="submit"]:focus,
+input[type="submit"]:focus {
+    background-color: var(--brand) !important;
+    border-color: var(--brand) !important;
+    box-shadow: 0 0 0 0.2rem rgba(1, 53, 127, 0.25) !important;
+}
+
+.bg-brand {
+    background: var(--brand);
+}
+
+.hero {
+    background: var(--brand);
+    color: #fff;
+}
+
+.search-card {
+    border: 2px solid var(--accent);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, .12);
+}
+
+.search-input .input-group-text {
+    background: #fff;
+    border-right: 0;
+}
+
+.search-input .form-control {
+    border-left: 0;
+}
+
+.guest-dropdown .btn {
+    height: 100%;
+}
+
+.guest-panel {
+    position: absolute;
+    z-index: 20;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: .5rem;
+    padding: .75rem;
+    margin-top: .25rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .15);
+}
+
+.counter .btn {
+    width: 2.25rem;
+    height: 2.25rem;
+    padding: 0;
+}
+
+.card img,
+.object-fit-cover {
+    object-fit: cover;
+}
+
+.section-title {
+    font-weight: 700;
+}
+
+.badge-hot {
+    background: var(--accent);
+}
+
+
+/* ========== Signup 2-panel ========== */
+.signup-card {
+    background: #fff;
+    border-radius: 1.25rem;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, .12);
+}
+
+.signup-left {
+    background: #6a67ff;
+    border-top-left-radius: 1.25rem;
+    border-bottom-left-radius: 1.25rem;
+    color: #fff;
+}
+
+.signup-input {
+    border: 1px solid #e7e7ef;
+    border-radius: .75rem;
+    padding: .9rem 1rem;
+}
+
+.signup-input:focus {
+    border-color: #6a67ff;
+    box-shadow: 0 0 0 .25rem rgba(106, 103, 255, .15);
+}
+
+.signup-btn {
+    background: #6a67ff;
+    border: none;
+    border-radius: 2rem;
+    padding: .9rem 1rem;
+    font-weight: 600;
+}
+
+.signup-btn:hover {
+    background: #5b57ff;
+}
+
+.btn-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@media (min-width:992px) {
+    .signup-card {
+        max-width: 980px;
+        margin: 0 auto;
+    }
+}
+
+/* ===== Auth full-width look ===== */
+.auth-hero {
+    background: var(--brand);
+    /* cùng màu với navbar */
+}
+
+.auth-card {
+    max-width: 980px;
+    /* rộng hơn; muốn full hơn: 1140px hoặc 1280px */
+    border-radius: 1.25rem;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, .18);
+}
+
+.auth-input {
+    border: 1px solid #e7e7ef;
+    border-radius: .75rem;
+    padding: .9rem 1rem;
+}
+
+.auth-input:focus {
+    border-color: #6789ff3d;
+    /* nhẹ nhàng */
+    box-shadow: 0 0 0 .25rem rgba(0, 53, 128, .12);
+}
+
+.auth-btn {
+    background: var(--brand);
+    /* có thể đổi = var(--accent) hoặc var(--brand) */
+    border: none;
+    border-radius: 2rem;
+    padding: .95rem 1rem;
+    font-weight: 600;
+}
+
+.auth-btn:hover {
+    background: #012a66;
+}
+
+/* Optional: muốn gần như full màn hình hơn nữa */
+@media (min-width:1200px) {
+    .auth-card {
+        max-width: 1140px;
+    }
+}
+
+@media (min-width:1400px) {
+    .auth-card {
+        max-width: 1280px;
+    }
+}
+
+/* Auth full-width but compact */
+.auth-card {
+    max-width: 760px;
+    /* ↓ nhỏ hơn — chỉnh 700–820 tùy ý */
+    border-radius: 1rem;
+    box-shadow: 0 18px 50px rgba(0, 0, 0, .14);
+}
+
+/* inputs + button giữ như trước */
+.auth-input {
+    border: 1px solid #e7e7ef;
+    border-radius: .75rem;
+    padding: .9rem 1rem;
+}
+
+.auth-input:focus {
+    border-color: #cbd5ff;
+    box-shadow: 0 0 0 .25rem rgba(0, 53, 128, .12);
+}
+
+.auth-btn {
+    background: var(--brand);
+    border: none;
+    border-radius: 2rem;
+    padding: .95rem 1rem;
+    font-weight: 600;
+}
+
+.auth-btn:hover {
+    background: #012a66;
+}
+
+/* "Or" divider */
+.auth-divider {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    color: #6c757d;
+    font-size: .9rem;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: #e9ecef;
+}
+
+/* Social buttons */
+.social-btn {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    border: 1px solid #e9ecef;
+    transition: box-shadow .15s, transform .15s;
+}
+
+.social-btn:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, .12);
+    transform: translateY(-1px);
+}
+
+.social-btn svg {
+    width: 20px;
+    height: 20px;
+    display: block;
+}
+
+.social-facebook {
+    color: #1877F2;
+}
+
+/* dùng icon bi-facebook */
+/* Primary auth button */
+.auth-btn {
+    background: #006CE4;
+    /* xanh Booking */
+    color: #fff;
+    /* chữ trắng */
+    border: none;
+    border-radius: 2rem;
+    padding: .95rem 1rem;
+    font-weight: 600;
+}
+
+.auth-btn:hover {
+    background: #0057c2;
+}
+
+.auth-btn:disabled {
+    background: #8dbcf2;
+    color: #fff;
+}
+
+/* ===== Host banner dưới navbar ===== */
+.host-banner {
+    background: var(--brand);
+    /* cùng màu navbar */
+    border-top: 1px solid rgba(255, 255, 255, .06);
+}
+
+.host-link {
+    color: #fff;
+}
+
+.host-link:hover {
+    opacity: .95;
+}
+
+.host-title {
+    font-weight: 700;
+    font-size: 1.125rem;
+}
+
+.user-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: .6rem;
+    background: rgba(255, 255, 255, .08);
+    padding: .35rem .6rem;
+    border-radius: 999px;
+}
+
+.avatar-initial {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #febb02;
+    color: #000;
+    font-weight: 700;
+    font-size: .95rem;
+}
+
+.user-meta {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+}
+
+.user-name {
+    font-weight: 700;
+}
+
+.user-tier {
+    font-size: .8rem;
+    opacity: .85;
+}
+
+/* Partner hero */
+.partner-hero {
+    background: var(--brand);
+}
+
+.partner-hero .text-accent {
+    color: var(--accent);
+}
+
+/* CTA card bên phải */
+.cta-card {
+    border: 3px solid var(--accent);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, .15);
+}
+
+.btn-cta {
+    background: #006CE4;
+    color: #fff;
+    font-weight: 700;
+    border: none;
+    border-radius: .75rem;
+    padding: .9rem 1rem;
+}
+
+.btn-cta:hover {
+    background: #0057c2;
+}
+
+/* dấu check */
+.check-badge {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #e8f6ed;
+    color: #198754;
+    font-weight: 700;
+    flex: 0 0 24px;
+}
+
+/* Chip tài khoản trên navbar */
+.user-chip-nav {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    padding: .25rem .6rem !important;
+    background: rgba(255, 255, 255, .08);
+    border-radius: 999px;
+    color: #fff !important;
+}
+
+.user-chip-nav:hover {
+    opacity: .95;
+}
+
+/* Avatar tròn nhỏ */
+.avatar-initial.sm {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #febb02;
+    color: #000;
+    font-weight: 700;
+    font-size: .95rem;
+}
+
+/* Dropdown đẹp hơn */
+.user-dropdown {
+    min-width: 280px;
+    border-radius: .75rem;
+    box-shadow: 0 14px 40px rgba(0, 0, 0, .18);
+    padding: .5rem;
+}
+
+.user-dropdown .dropdown-item {
+    border-radius: .5rem;
+    padding: .6rem .75rem;
+}
+
+.user-dropdown .dropdown-item i {
+    width: 1.1rem;
+}
+
+
+/* Link "Đăng chỗ nghỉ..." trên navbar: không nền, hover -> trắng */
+.host-post-link {
+    color: rgba(255, 255, 255, .55) !important;
+    /* giống nav-link mặc định của navbar-dark */
+    font-weight: 700;
+    padding: .5rem .75rem !important;
+    background: transparent !important;
+    border-radius: 0 !important;
+}
+
+.host-post-link i {
+    opacity: .85;
+    transition: opacity .15s;
+}
+
+/* Hover/focus: chữ & icon thành trắng */
+.host-post-link:hover,
+.host-post-link:focus {
+    color: #fff !important;
+    background: transparent !important;
+}
+
+.host-post-link:hover i,
+.host-post-link:focus i {
+    opacity: 1;
+}
+
+/* (tuỳ chọn) khi đang ở trang Partner thì coi như "active" -> trắng luôn */
+.navbar-dark .nav-link.host-post-link.active {
+    color: #fff !important;
+}
+
+@media (min-width: 992px) {
+    .host-post-link {
+        padding: .4rem .75rem !important;
+        background: rgba(255, 255, 255, .08);
+    }
+
+    .host-post-link:hover {
+        background: rgba(255, 255, 255, .12);
+    }
+}
+
+
+/* Nav links: mặc định nhạt, HOVER -> trắng hẳn */
+.navbar-dark .navbar-nav .nav-link {
+    color: rgba(255, 255, 255, .55) !important;
+    transition: color .15s ease;
+}
+
+/* hover/focus = trắng hẳn cho TẤT CẢ các mục */
+.navbar-dark .navbar-nav .nav-link:hover,
+.navbar-dark .navbar-nav .nav-link:focus {
+    color: #fff !important;
+}
+
+/* trạng thái active cũng trắng hẳn */
+.navbar-dark .navbar-nav .nav-link.active,
+.navbar-dark .navbar-nav .show>.nav-link {
+    color: #fff !important;
+}
+
+/* icon trong nav kế thừa màu, tăng chút độ rõ khi hover */
+.navbar-dark .navbar-nav .nav-link i {
+    opacity: .9;
+    transition: opacity .15s;
+}
+
+.navbar-dark .navbar-nav .nav-link:hover i,
+.navbar-dark .navbar-nav .nav-link:focus i {
+    opacity: 1;
+}
+
+.section-muted {
+    background: #f5f7fb;
+}
+
+/* nền xám nhẹ */
+.step-card {
+    border: 1px solid #eef0f5;
+    border-radius: 1rem;
+    background: #fff;
+    transition: box-shadow .15s, transform .15s;
+}
+
+.step-card:hover {
+    box-shadow: 0 14px 34px rgba(0, 0, 0, .08);
+    transform: translateY(-2px);
+}
+
+.step-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #e7f1ff;
+    color: #006CE4;
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+.metric .metric-value {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #0b1f3f;
+}
+
+.metric .metric-note {
+    color: #6c757d;
+    font-size: .95rem;
+}
+
+/* Testimonials */
+.testimonial-card {
+    border: 1px solid #eee;
+    border-radius: .9rem;
+    background: #fff;
+    outline: 2px solid rgba(254, 187, 2, .5);
+    /* viền vàng mảnh như ảnh */
+    outline-offset: -6px;
+    transition: box-shadow .15s, transform .15s;
+}
+
+.testimonial-card:hover {
+    box-shadow: 0 14px 34px rgba(0, 0, 0, .08);
+    transform: translateY(-2px);
+}
+
+.testimonial-card blockquote {
+    font-size: .95rem;
+    color: #0b1f3f;
+    margin: 0;
+}
+
+.host-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.xsmall {
+    font-size: .8rem;
+}
+
+:root {
+    --bk-blue: #006CE4;
+    --bk-blue-hover: #0057c2;
+    --bk-blue-active: #0048a3;
+}
+
+/* Nút xanh kiểu Booking */
+.btn-bk-primary {
+    background: var(--bk-blue);
+    color: #fff !important;
+    border: none;
+    font-weight: 700;
+    border-radius: 1rem;
+    /* bo tròn lớn */
+    padding: 1rem 1.25rem;
+    /* nút dày như hình */
+    box-shadow: 0 1px 0 rgba(0, 0, 0, .08);
+    line-height: 1.25;
+}
+
+.btn-bk-primary:hover {
+    background: var(--bk-blue-hover);
+}
+
+.btn-bk-primary:active {
+    background: var(--bk-blue-active);
+}
+
+.btn-bk-primary:focus {
+    box-shadow: 0 0 0 .25rem rgba(0, 108, 228, .25);
+    outline: 0;
+}
+
+/* Nút viền xanh (nếu cần loại viền) */
+.btn-bk-outline {
+    background: #fff;
+    color: var(--bk-blue) !important;
+    border: 2px solid var(--bk-blue);
+    font-weight: 700;
+    border-radius: 9999px;
+    /* pill */
+    padding: .95rem 1.35rem;
+}
+
+.btn-bk-outline:hover {
+    background: rgba(0, 108, 228, .08);
+}
+
+
+.type-card {
+    transition: all .15s ease;
+    border-width: 2px;
+}
+
+.btn-check:checked+.type-card,
+.type-card:hover {
+    background: #f0f6ff;
+    border-color: #006CE4;
+}
+
+/* thẻ chọn loại */
+.type-card {
+    transition: .15s;
+    border-width: 2px;
+}
+
+.btn-check:checked+.type-card,
+.type-card:hover {
+    background: #f0f6ff;
+    border-color: #006CE4;
+}
+
+/* sticky footer */
+.onb-sticky {
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border-top: 1px solid #eee;
+    padding: .75rem 0;
+    z-index: 100;
+}
+
+/* nút primary giống booking */
+.btn-bk-primary {
+    background: #006CE4;
+    border: none;
+    color: #fff;
+    font-weight: 700;
+    border-radius: .8rem;
+}
+
+.btn-bk-primary:hover {
+    filter: brightness(0.95);
+    color: #fff;
+}
+
+
+/* Modal chọn loại cơ sở — rõ, to, tương phản */
+#typeModal .modal-dialog {
+    max-width: 960px;
+    /* rộng hơn một chút */
+}
+
+#typeModal .type-grid {
+    row-gap: 14px;
+}
+
+/* thẻ chọn */
+#typeModal .type-card {
+    border-width: 2px;
+    border-color: #d6e4ff;
+    background: #f8fbff;
+    color: #0a3d7a;
+    font-weight: 600;
+    text-align: center;
+    padding: 18px 14px;
+    border-radius: 16px;
+    transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease, background .12s ease;
+}
+
+/* icon trên mỗi thẻ (nếu dùng) */
+#typeModal .type-card .type-icon {
+    display: block;
+    font-size: 22px;
+    margin-bottom: 6px;
+    opacity: .9;
+}
+
+/* hover */
+#typeModal .btn-check+.type-card:hover {
+    border-color: #006CE4;
+    box-shadow: 0 0 0 4px rgba(0, 108, 228, .12);
+    transform: translateY(-1px);
+}
+
+/* checked */
+#typeModal .btn-check:checked+.type-card {
+    background: #006CE4;
+    color: #fff;
+    border-color: #006CE4;
+    box-shadow: 0 0 0 4px rgba(0, 108, 228, .18);
+}
+
+/* nút Lưu đồng bộ style primary */
+#typeModal .btn-bk-primary {
+    background: #006CE4;
+    border: none;
+    color: #fff;
+    font-weight: 700;
+    border-radius: .8rem;
+}
+
+#typeModal .btn-bk-primary:hover {
+    filter: brightness(.95);
+    color: #fff;
+}
+
+
+
+/* Container chính chứa 2 cột trái và phải */
+section.py-4>.container>.row {
+    /* Đặt chiều cao của nó bằng chiều cao màn hình trừ đi chiều cao của thanh header trên cùng (ước tính 60px) */
+    height: calc(100vh - 60px);
+}
+
+/* Cột nội dung bên phải */
+.col-lg-9 {
+    height: 100%;
+    /* Luôn cao bằng thẻ cha (.row) */
+    overflow-y: auto;
+    /* Thêm thanh cuộn dọc CHỈ cho cột này */
+}
+
+/* Cột menu bên trái */
+aside.col-lg-3.sticky-top {
+    align-self: flex-start;
+    /* Đảm bảo nó không bị kéo dài theo cột phải */
+    top: 20px;
+    /* Giữ khoảng cách 20px với lề trên */
+}

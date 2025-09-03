@@ -1,0 +1,1433 @@
+@model HotelBooking.ViewModels.Rooms.RoomCreateViewModel
+@{
+    ViewData["Title"] = "Dữ liệu phòng";
+}
+<div class="container-xl ui-compact room-wizard" style="max-width:1100px;">
+    <div class="d-flex align-items-start justify-content-between mb-3">
+        <a href="@Url.Action("PropertyData", "Partner", new { propertyId = Model.PropertyId, tab = "rooms" })"
+            class="btn btn-link px-0 text-decoration-none mt-2">&larr; Quay lại</a>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-3 mb-3">
+            <div class="step-nav card card-slim sticky-top" style="top:12px;">
+                <div class="card-body p-0">
+                    <div class="step-title">Dữ liệu phòng</div>
+                    <ul class="wizard-steps">
+                        <li class="active"><a href="#sec-info">Thông tin phòng</a></li>
+                        <li><a href="#sec-detail">Chi tiết phòng</a></li>
+                        <li><a href="#sec-bed">Cài đặt giường ngủ</a></li>
+                        <li><a href="#sec-amenities">Tiện nghi phòng</a></li>
+                    </ul>
+                    <div class="step-title">Công suất phòng và Mức bảo hộ giá</div>
+                    <ul class="wizard-steps">
+                        <li><a href="#sec-capacity">Cài đặt công suất phòng</a></li>
+                        <li><a href="#sec-security">Mức bảo hộ</a></li>
+                    </ul>
+                    <div class="step-title">Ảnh</div>
+                    <ul class="wizard-steps">
+                        <li><a href="#sec-photos">Ảnh phòng</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-9">
+            <form asp-action="RoomData" method="post" enctype="multipart/form-data" id="roomForm">
+                <input type="hidden" asp-for="PropertyId" />
+                <input type="hidden" asp-for="RoomId" />
+
+                <!-- ===== THÔNG TIN PHÒNG (giống ảnh) ===== -->
+                <section id="sec-info" class="tera-card mb-3">
+                    <div class="section-head">
+                        <h3 class="tera-title">Thông tin phòng</h3>
+                        <p class="tera-desc">Nêu rõ tên và loại phòng. Bạn có thể thay đổi cài đặt này sau trong TERA.
+                        </p>
+                    </div>
+
+                    <div class="row g-3 align-items-center">
+                        <div class="col-md-3">
+                            <label class="form-label form-label-lg mb-0">Loại phòng</label>
+                        </div>
+                        <div class="col-md-9">
+                            <select asp-for="RoomType" class="form-select form-select-sm">
+                                <option value="">Chọn loại phòng</option>
+                                @foreach (var t in Model.RoomTypes)
+                                {
+                                    <option>@t</option>
+                                }
+                            </select>
+                            <span class="text-danger small" asp-validation-for="RoomType"></span>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label form-label-lg mb-0">Tên phòng</label>
+                        </div>
+                        <div class="col-md-9">
+                            <input asp-for="RoomName" class="form-control form-control-sm"
+                                placeholder="Nhập tên phòng của bạn bằng ký tự chữ và số." />
+                            <span class="text-danger small" asp-validation-for="RoomName"></span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ===== CHI TIẾT PHÒNG (giống ảnh) ===== -->
+                <section id="sec-detail" class="tera-card mb-3">
+                    <div class="section-head">
+                        <h3 class="tera-title">Chi tiết phòng</h3>
+                        <p class="tera-desc">Nêu rõ các đặc điểm của phòng. Bạn có thể thay đổi cài đặt này sau trong
+                            TERA.</p>
+                    </div>
+
+                    <!-- Hàng: Kích cỡ phòng / đơn vị + Kích cỡ + Đơn vị -->
+                    <div class="row g-3 align-items-start">
+                        <div class="col-md-3">
+                            <label class="form-label form-label-lg mb-1">Kích cỡ phòng / đơn vị</label>
+                            <div class="form-hint">Kích thước phòng sẽ được hiển thị cho khách.</div>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label mb-1">Kích cỡ</label>
+                            <input asp-for="SizeNumber" type="number" min="1" class="form-control form-control-sm"
+                                placeholder="Nhập số" />
+                            <span class="text-danger small" asp-validation-for="SizeNumber"></span>
+                        </div>
+                        <div class="col-md-5">
+                            <label class="form-label mb-1">Đơn vị</label>
+                            <select asp-for="SizeUnit" class="form-select form-select-sm">
+                                <option value="" disabled selected>Nhập đơn vị</option>
+                                <option value="m2">m²</option>
+                                <option value="ft2">ft²</option>
+                            </select>
+                            <span class="text-danger small" asp-validation-for="SizeUnit"></span>
+                        </div>
+                    </div>
+
+                    <!-- Hàng: Hút thuốc -->
+                    <div class="row g-3 align-items-center mt-2">
+                        <div class="col-md-3">
+                            <label class="form-label form-label-lg mb-0">Hút thuốc</label>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="d-flex gap-4 align-items-center">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="SmokingAllowed" value="false"
+                                        @(Model.SmokingAllowed ? "" : "checked") />
+                                    <label class="form-check-label">Cấm hút thuốc</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="SmokingAllowed" value="true"
+                                        @(Model.SmokingAllowed ? "checked" : "") />
+                                    <label class="form-check-label">Cho phép</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hàng: Quỹ phòng -->
+                    <div class="row g-3 align-items-start mt-2">
+                        <div class="col-md-3">
+                            <label class="form-label form-label-lg mb-1">Quỹ phòng</label>
+                            <div class="form-hint">Số lượng phòng sẽ được mở để đặt phòng</div>
+                        </div>
+                        <div class="col-md-9">
+                            <input asp-for="Quantity" type="number" min="1" class="form-control form-control-sm"
+                                placeholder="Nhập số" />
+                            <span class="text-danger small" asp-validation-for="Quantity"></span>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="sec-bed" class="tera-card mb-3">
+                    <div class="section-head">
+                        <h3 class="tera-title">Cài đặt giường ngủ</h3>
+                        <p class="tera-desc">Nêu rõ số lượng giường có trong phòng này. Bạn có thể thay đổi cài đặt này
+                            sau trong TERA.</p>
+                    </div>
+
+                    <!-- Radio chọn số lượng phòng ngủ -->
+                    <div class="mb-3">
+                        <label class="form-label form-label-lg d-block mb-2">Số lượng phòng ngủ</label>
+                        <div class="d-flex gap-4 align-items-center">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="IsSingleBedroom" value="true"
+                                    @(Model.IsSingleBedroom ? "checked" : "")>
+                                <label class="form-check-label">Phòng ngủ đơn</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="IsSingleBedroom" value="false"
+                                    @(!Model.IsSingleBedroom ? "checked" : "")>
+                                <label class="form-check-label">Nhiều phòng ngủ</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Single bedroom: giống ảnh (1 block nền xám + nút Thêm loại giường) -->
+                    <div id="singleBedroomBox" class="bed-box rounded-3 p-3 mb-3">
+                        <div class="row g-3 align-items-center single-rows" id="singleBeds"></div>
+                        <button type="button" class="btn btn-outline-primary btn-sm mt-2" id="btnAddSingleBed">+ Thêm
+                            loại giường</button>
+                    </div>
+
+                    <!-- Multi bedroom: mỗi “phòng ngủ” là 1 box, có nút Thêm loại giường khác, dưới cùng là nút full width -->
+                    <div id="multiBedroomBox" class="d-none">
+                        <div id="bedroomsContainer"></div>
+                        <button type="button" id="btnAddBedroom" class="btn btn-outline-primary btn-sm w-100 mt-2">+
+                            Thêm loại phòng ngủ khác</button>
+                    </div>
+                </section>
+
+                <!-- Tiện nghi -->
+                <section id="sec-amenities" class="tera-card mb-3">
+                    <div class="section-head">
+                        <h3 class="tera-title">Tiện nghi phòng</h3>
+                        <p class="tera-desc">Chọn tiện nghi có trong loại phòng này.</p>
+                        <small class="text-muted">Vui lòng chọn <strong>ít nhất 1</strong> tiện nghi.</small>
+                    </div>
+                    <div class="amenities-container">
+                        @foreach (var grp in Model.AmenityGroups)
+                        {
+                            <div class="amenity-group mb-3">
+                                <div class="group-title mb-2">
+                                    <i class="bi bi-building me-2"></i>@grp.Key
+                                </div>
+                                <div class="amenity-list">
+                                    @foreach (var a in grp.Value)
+                                    {
+                                        var id = $"amen_{a.Replace(" ", "_")}";
+                                        <div class="amenity-item">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="@id"
+                                                    name="SelectedAmenities" value="@a" @(Model.SelectedAmenities.Contains(a) ?
+                                                                                                                                    "checked" : null) />
+                                                <label class="form-check-label" for="@id">@a</label>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        }
+                        <div class="alert alert-light small border mt-3">
+                            <i class="bi bi-info-circle me-2"></i>Không phải tiện nghi nào cũng được liệt kê ở đây. Bạn
+                            có thể thêm nhiều tiện nghi khác sau trong TERA.
+                        </div>
+                    </div>
+                </section>
+
+                <section id="sec-capacity" class="tera-card mb-3">
+                    <div class="section-head">
+                        <h3 class="tera-title">Cài đặt công suất phòng</h3>
+                        <p class="tera-desc">Xác định số lượng khách tối đa có thể lưu trú trong phòng này. Bạn có thể
+                            thay đổi cài đặt này sau trong TERA.</p>
+                    </div>
+
+                    <!-- Sức chứa người lớn tối đa -->
+                    <div class="row g-3 align-items-start mb-3">
+                        <div class="col-md-3">
+                            <label class="form-label form-label-lg mb-1">Sức chứa người lớn tối đa</label>
+                        </div>
+                        <div class="col-md-9">
+                            <input asp-for="CapacityAdults" type="number" min="1" class="form-control form-control-sm"
+                                placeholder="Nhập số" />
+                            <span class="text-danger small" asp-validation-for="CapacityAdults"></span>
+                        </div>
+                    </div>
+
+                    <!-- Sức chứa trẻ em -->
+                    <div class="row g-3 align-items-start mb-3">
+                        <div class="col-md-3">
+                            <label class="form-label form-label-lg mb-1">Sức chứa trẻ em</label>
+                            <div class="form-hint">Nếu cho phép, sức chứa trẻ em tối đa sẽ được đặt thành một.</div>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="d-flex gap-4 align-items-center">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="AllowChildren" value="true"
+                                        id="allowChildren" @(Model.AllowChildren ? "checked" : "") />
+                                    <label class="form-check-label" for="allowChildren">Cho phép</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="AllowChildren" value="false"
+                                        id="disallowChildren" @(!Model.AllowChildren ? "checked" : "") />
+                                    <label class="form-check-label" for="disallowChildren">Không cho phép</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Giường phụ -->
+                    <div class="row g-3 align-items-start">
+                        <div class="col-md-3">
+                            <label class="form-label form-label-lg mb-1">Giường phụ</label>
+                            <div class="form-hint">Nếu cho phép, giường phụ tối đa sẽ được đặt thành một.</div>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="d-flex gap-4 align-items-center">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="AllowExtraBed" value="true"
+                                        id="allowExtraBed" @(Model.AllowExtraBed ? "checked" : "") />
+                                    <label class="form-check-label" for="allowExtraBed">Cho phép</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="AllowExtraBed" value="false"
+                                        id="disallowExtraBed" @(!Model.AllowExtraBed ? "checked" : "") />
+                                    <label class="form-check-label" for="disallowExtraBed">Không cho phép</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="sec-security" class="tera-card mb-3">
+                    <div class="section-head">
+                        <h3 class="tera-title">Mức bảo hộ</h3>
+                        <p class="tera-desc">Đặt mức giá tối thiểu cho phòng này. Thao tác này đảm bảo rằng phòng của
+                            bạn sẽ không được bán với mức giá thấp hơn mức giá này sau khi đã áp dụng giảm giá, khuyến
+                            mãi.</p>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label form-label-lg mb-1">Mức giá tối thiểu</label>
+                            <div class="input-group">
+                                <span class="input-group-text">VND</span>
+                                <input type="hidden" asp-for="SecurityDeposit" id="SecurityDeposit" />
+                                <input type="text" id="SecurityDepositDisplay" class="form-control form-control-sm"
+                                    placeholder="Nhập giá" inputmode="numeric" autocomplete="off" />
+                            </div>
+                            <span class="text-danger small" asp-validation-for="SecurityDeposit"></span>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="sec-photos" class="tera-card mb-3">
+                    <div class="section-head">
+                        <h3 class="tera-title">Ảnh phòng</h3>
+                        <p class="tera-desc">Phòng phải có ít nhất một bức ảnh cho phòng ngủ và một bức ảnh cho phòng
+                            tắm. 56% khách truy cập vào trang phòng khách sạn thường bắt đầu bằng việc xem các bức ảnh.
+                        </p>
+                        <a href="#" class="text-primary small">Xem Hướng dẫn về ảnh chụp chỗ ở.</a>
+                    </div>
+
+                    <!-- Yêu cầu về ảnh -->
+                    <div class="photo-requirements mb-4">
+                        <h6 class="fw-semibold mb-2">Yêu cầu về ảnh:</h6>
+                        <ul class="list-unstyled small text-muted">
+                            <li>• Độ phân giải: Tối thiểu 800x600 px và tối đa 4096x4096 px</li>
+                            <li>• Kích cỡ: Tối thiểu 300KB và tối đa 20MB</li>
+                        </ul>
+                    </div>
+
+                    <!-- Khu vực tải ảnh -->
+                    <div class="row g-4">
+                        <!-- Bedroom -->
+                        <div class="col-md-6">
+                            <div class="upload-zone" id="bedroomUpload">
+                                <div class="upload-content text-center">
+                                    <i class="bi bi-camera fs-1 text-muted mb-2"></i>
+                                    <h6 class="mb-2">Bedroom</h6>
+                                    <a href="#" class="btn btn-link p-0 text-primary">Tải lên ảnh</a>
+                                </div>
+                                <input type="file" name="BedroomPhotos" id="bedroomPhotos" multiple accept="image/*"
+                                    class="upload-input" />
+                            </div>
+                            <div id="bedroomError" class="photo-error text-danger small d-none">Đây là phần bắt buộc.
+                            </div>
+                        </div>
+
+                        <!-- Bathroom -->
+                        <div class="col-md-6">
+                            <div class="upload-zone" id="bathroomUpload">
+                                <div class="upload-content text-center">
+                                    <i class="bi bi-camera fs-1 text-muted mb-2"></i>
+                                    <h6 class="mb-2">Bathroom</h6>
+                                    <a href="#" class="btn btn-link p-0 text-primary">Tải lên ảnh</a>
+                                </div>
+                                <input type="file" name="BathroomPhotos" id="bathroomPhotos" multiple accept="image/*"
+                                    class="upload-input" />
+                            </div>
+                            <div id="bathroomError" class="photo-error text-danger small d-none">Đây là phần bắt buộc.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Khu vực tải ảnh bổ sung -->
+                    <div class="row g-4 mt-3">
+                        <div class="col-12">
+                            <!-- Khu vực tải ảnh lớn (khi chưa có ảnh) -->
+                            <div class="upload-zone upload-zone-large" id="additionalUploadLarge">
+                                <div class="upload-content text-center">
+                                    <i class="bi bi-camera fs-1 text-muted mb-2"></i>
+                                    <h6 class="mb-2">Tải lên thêm ảnh</h6>
+                                    <small class="text-muted d-block">Thêm ảnh khác để hiển thị phòng tốt hơn</small>
+                                </div>
+                                <input type="file" name="AdditionalPhotos" id="additionalPhotos" multiple
+                                    accept="image/*" class="upload-input" />
+                            </div>
+
+                            <!-- Lưới ảnh thumbnail (khi đã có ảnh) -->
+                            <div id="additionalPhotosGrid" class="d-none">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h6 class="fw-semibold mb-0">Ảnh bổ sung</h6>
+                                    <button type="button" class="btn btn-outline-primary btn-sm" id="btnAddMorePhotos">
+                                        <i class="bi bi-plus-lg me-1"></i>Tải lên thêm ảnh
+                                    </button>
+                                </div>
+                                <div class="row g-3" id="additionalPhotosContainer">
+                                    <!-- Ảnh thumbnail sẽ được render ở đây -->
+                                </div>
+                                <input type="file" name="MoreAdditionalPhotos" id="moreAdditionalPhotos" multiple
+                                    accept="image/*" class="d-none" />
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="action-bar d-flex justify-content-end align-items-center no-bg">
+                    <button type="submit" class="btn btn-primary px-4 py-2"
+                        style="font-size:16px; background-color: #FF5E20; border-color: #FF5E20;">Lưu</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        (() => {
+            const OFFSET = 20; // giảm offset theo layout mới
+            const links = [...document.querySelectorAll('.wizard-steps a')];
+            let isAutoScrolling = false;
+
+            const highlightTimers = {};
+            function setActive(id) {
+                links.forEach(l => l.parentElement.classList.toggle('active', l.getAttribute('href') === '#' + id));
+                // highlight section bên phải chỉ trong 3s
+                ids.forEach(secId => {
+                    const el = document.getElementById(secId);
+                    if (!el) return;
+                    el.classList.remove('card-highlight');
+                    if (secId === id) {
+                        el.classList.add('card-highlight');
+                        if (highlightTimers[secId]) clearTimeout(highlightTimers[secId]);
+                        highlightTimers[secId] = setTimeout(() => {
+                            el.classList.remove('card-highlight');
+                        }, 1000);
+                    }
+                });
+            }
+            function smoothTo(href) {
+                const el = document.querySelector(href);
+                if (!el) return;
+                const top = el.getBoundingClientRect().top + window.scrollY - OFFSET;
+                isAutoScrolling = true;
+                window.scrollTo({ top, behavior: 'smooth' });
+                const id = href.replace('#', '');
+                setTimeout(() => { isAutoScrolling = false; setActive(id); }, 600);
+            }
+            // Click: set active ngay + scroll có bù offset
+            links.forEach(a => a.addEventListener('click', e => {
+                e.preventDefault();
+                const id = a.getAttribute('href').replace('#', '');
+                setActive(id);
+                smoothTo('#' + id);
+            }));
+            // Scroll: chọn section hiện hành
+            const ids = ['sec-info', 'sec-detail', 'sec-bed', 'sec-amenities', 'sec-capacity', 'sec-security', 'sec-photos'];
+            const onScroll = () => {
+                if (isAutoScrolling) return;
+                let best = ids[0]; let bestTop = Number.POSITIVE_INFINITY;
+                ids.forEach(id => { const el = document.getElementById(id); if (!el) return; const r = el.getBoundingClientRect(); const t = Math.abs(r.top); if (r.top <= window.innerHeight * 0.5 && t < bestTop) { bestTop = t; best = id; } });
+                setActive(best);
+            };
+            document.addEventListener('scroll', onScroll, { passive: true });
+            window.addEventListener('load', onScroll);
+
+            const bedList = document.getElementById('bedList');
+            const btnAddBed = document.getElementById('btnAddBed');
+            const bedTypes = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.BedTypes));
+            function addBedRow(type = bedTypes[0], count = 1) {
+                const idx = bedList.querySelectorAll('.bed-row').length;
+                const wrap = document.createElement('div');
+                wrap.className = 'row g-2 align-items-end bed-row mb-2';
+                wrap.innerHTML = `
+                                                                                                                                            <div class="col-7 col-md-6">
+                                                                                                                                                <label class="form-label mb-1">Loại giường</label>
+                                                                                                                                                <select name="Beds[${idx}].Type" class="form-select form-select-sm">
+                                                                                                                                                    ${bedTypes.map(b => `<option ${b === type ? 'selected' : ''}>${b}</option>`).join('')}
+                                                                                                                                                </select>
+                                                                                                                                            </div>
+                                                                                                                                            <div class="col-3 col-md-3">
+                                                                                                                                                <label class="form-label mb-1">Số lượng</label>
+                                                                                                                                                <input name="Beds[${idx}].Count" type="number" min="1" value="${count}" class="form-control form-control-sm" />
+                                                                                                                                            </div>
+                                                                                                                                            <div class="col-2 col-md-3">
+                                                                                                                                                <button type="button" class="btn btn-outline-danger btn-sm w-100 js-remove-bed">Xóa</button>
+                                                                                                                                            </div>`;
+                bedList.appendChild(wrap);
+            }
+            btnAddBed?.addEventListener('click', () => addBedRow());
+            bedList?.addEventListener('click', (e) => {
+                if (e.target.closest('.js-remove-bed')) {
+                    e.target.closest('.bed-row')?.remove();
+                    [...bedList.querySelectorAll('.bed-row')].forEach((row, i) => {
+                        row.querySelectorAll('[name]').forEach(inp => { inp.name = inp.name.replace(/Beds\[\d+\]/, `Beds[${i}]`); });
+                    });
+                }
+            });
+
+            document.getElementById('roomPhotos')?.addEventListener('change', (e) => {
+                const zone = document.getElementById('photoPreview'); zone.innerHTML = '';
+                [...e.target.files].forEach(f => {
+                    const url = URL.createObjectURL(f);
+                    const col = document.createElement('div'); col.className = 'col-6 col-md-4';
+                    col.innerHTML = `<img src="${url}" class="img-fluid rounded border" />`;
+                    zone.appendChild(col);
+                });
+            });
+
+            // ====== XỬ LÝ TẢI ẢNH (Logic giống hệt PropertyData) ======
+            let roomPhotos = []; // Mảng lưu tất cả ảnh phòng
+            let deletedPhotoIds = []; // Mảng lưu ID ảnh đã xóa
+
+            // Event listeners cho các input file
+            document.getElementById('bedroomPhotos')?.addEventListener('change', (e) => {
+                handleRoomPhotoUpload(e, 'bedroom');
+            });
+
+            document.getElementById('bathroomPhotos')?.addEventListener('change', (e) => {
+                handleRoomPhotoUpload(e, 'bathroom');
+            });
+
+            document.getElementById('additionalPhotos')?.addEventListener('change', (e) => {
+                handleRoomPhotoUpload(e, 'additional');
+            });
+
+            document.getElementById('moreAdditionalPhotos')?.addEventListener('change', (e) => {
+                handleRoomPhotoUpload(e, 'additional');
+            });
+
+            // Nút "Tải lên thêm ảnh" trong lưới thumbnail
+            document.getElementById('btnAddMorePhotos')?.addEventListener('click', () => {
+                document.getElementById('moreAdditionalPhotos').click();
+            });
+
+            function handleRoomPhotoUpload(e, category) {
+                const files = [...e.target.files];
+                if (files.length > 0) {
+                    files.forEach(file => {
+                        const photo = {
+                            id: Date.now() + Math.random(),
+                            file: file,
+                            preview: URL.createObjectURL(file),
+                            category: category,
+                            isNew: true
+                        };
+                        roomPhotos.push(photo);
+                    });
+
+                    // Cập nhật UI
+                    updateRoomPhotoUI();
+
+                    // Reset input
+                    e.target.value = '';
+                }
+            }
+
+            function updateRoomPhotoUI() {
+                // Cập nhật khu vực Bedroom
+                updateCategoryZone('bedroom');
+
+                // Cập nhật khu vực Bathroom
+                updateCategoryZone('bathroom');
+
+                // Cập nhật khu vực ảnh bổ sung
+                updateAdditionalPhotosUI();
+            }
+
+            function updateCategoryZone(category) {
+                const uploadZone = document.getElementById(category + 'Upload');
+                const uploadContent = uploadZone.querySelector('.upload-content');
+                const photos = roomPhotos.filter(p => p.category === category);
+
+                if (photos.length > 0) {
+                    // Có ảnh: hiển thị ảnh với style giống additional photos
+                    const firstPhoto = photos[0];
+                    uploadContent.innerHTML = `
+                                                <div class="additional-photo-item" data-photo-id="${firstPhoto.id}">
+                                                    <img src="${firstPhoto.preview}" alt="${category === 'bedroom' ? 'Bedroom' : 'Bathroom'}" />
+                                                    <div class="additional-photo-overlay">
+                                                        <button type="button" class="btn btn-preview btn-sm" onclick="previewRoomPhoto('${firstPhoto.id}')">
+                                                            <i class="bi bi-eye me-1"></i>Xem
+                                                        </button>
+                                                        <button type="button" class="btn btn-delete btn-sm" onclick="deleteRoomPhoto('${firstPhoto.id}')">
+                                                            <i class="bi bi-trash me-1"></i>Xóa
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div class="mt-2 text-center">
+                                                    <small class="badge bg-primary">${photos.length} ảnh</small>
+                                                </div>
+                                            `;
+                } else {
+                    // Không có ảnh: hiển thị giao diện tải
+                    uploadContent.innerHTML = `
+                                                <i class="bi bi-camera fs-1 text-muted mb-2"></i>
+                                                <h6 class="mb-2">${category === 'bedroom' ? 'Bedroom' : 'Bathroom'}</h6>
+                                                <a href="#" class="btn btn-link p-0 text-primary">Tải lên ảnh</a>
+                                            `;
+                }
+            }
+
+            function updateAdditionalPhotosUI() {
+                const largeUpload = document.getElementById('additionalUploadLarge');
+                const thumbnailGrid = document.getElementById('additionalPhotosGrid');
+                const additionalPhotos = roomPhotos.filter(p => p.category === 'additional');
+
+                if (additionalPhotos.length === 0) {
+                    // Chưa có ảnh: hiển thị khu vực tải lớn
+                    largeUpload.classList.remove('d-none');
+                    thumbnailGrid.classList.add('d-none');
+                } else {
+                    // Đã có ảnh: hiển thị lưới thumbnail
+                    largeUpload.classList.add('d-none');
+                    thumbnailGrid.classList.remove('d-none');
+
+                    // Render lưới thumbnail
+                    renderAdditionalPhotosGrid();
+                }
+            }
+
+            function renderAdditionalPhotosGrid() {
+                const container = document.getElementById('additionalPhotosContainer');
+                container.innerHTML = '';
+
+                const additionalPhotos = roomPhotos.filter(p => p.category === 'additional');
+                additionalPhotos.forEach((photo, index) => {
+                    const col = document.createElement('div');
+                    col.className = 'col-6 col-md-4 col-lg-3';
+                    col.innerHTML = `
+                                                    <div class="additional-photo-item" data-photo-id="${photo.id}">
+                                                        <img src="${photo.preview}" alt="Ảnh bổ sung" />
+                                                        <div class="additional-photo-overlay">
+                                                            <button type="button" class="btn btn-preview btn-sm" onclick="previewRoomPhoto('${photo.id}')">
+                                                                <i class="bi bi-eye me-1"></i>Xem
+                                                            </button>
+                                                            <button type="button" class="btn btn-delete btn-sm" onclick="deleteRoomPhoto('${photo.id}')">
+                                                                <i class="bi bi-trash me-1"></i>Xóa
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                `;
+                    container.appendChild(col);
+                });
+            }
+
+            function deleteRoomPhoto(photoId) {
+                const photo = roomPhotos.find(p => p.id === photoId);
+                if (photo) {
+                    // Nếu là ảnh đã lưu (có ID thực), thêm vào danh sách xóa
+                    if (!photo.isNew && photo.dbId) {
+                        deletedPhotoIds.push(photo.dbId);
+                    }
+
+                    // Giải phóng URL object
+                    URL.revokeObjectURL(photo.preview);
+
+                    // Xóa khỏi mảng
+                    const index = roomPhotos.findIndex(p => p.id === photoId);
+                    roomPhotos.splice(index, 1);
+
+                    // Cập nhật UI
+                    updateRoomPhotoUI();
+                }
+            }
+
+            function previewRoomPhoto(photoId) {
+                const photo = roomPhotos.find(p => p.id === photoId);
+                if (photo) {
+                    // Tạo modal preview
+                    const modal = document.createElement('div');
+                    modal.className = 'position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center';
+                    modal.style.cssText = 'background: rgba(0,0,0,0.8); z-index: 9999;';
+                    modal.innerHTML = `
+                                                    <div class="position-relative">
+                                                        <img src="${photo.preview}" class="img-fluid" style="max-height: 80vh; max-width: 80vw;" />
+                                                        <button type="button" class="btn-close position-absolute top-0 end-0 m-2" onclick="this.closest('.position-fixed').remove()"></button>
+                                                    </div>
+                                                `;
+                    document.body.appendChild(modal);
+
+                    // Click ngoài để đóng
+                    modal.addEventListener('click', (e) => {
+                        if (e.target === modal) modal.remove();
+                    });
+                }
+            }
+
+            // Khởi tạo UI
+            updateRoomPhotoUI();
+
+            // ====== CÀI ĐẶT GIƯỜNG NGỦ (theo block mới) ======
+            (function bedSetup() {
+                const bedTypes = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.BedTypes));
+                const singleBox = document.getElementById('singleBedroomBox');
+                const multiBox = document.getElementById('multiBedroomBox');
+                const singleRows = document.getElementById('singleBeds');
+                const btnAddSingleBed = document.getElementById('btnAddSingleBed');
+                const bedroomsContainer = document.getElementById('bedroomsContainer');
+                const btnAddBedroom = document.getElementById('btnAddBedroom');
+
+                function setDisabled(container, disabled) {
+                    container?.querySelectorAll('input, select, button')
+                        .forEach(el => el.disabled = disabled);
+                }
+
+                function addSingleBedRow(type = bedTypes[0], count = '') {
+                    const idx = singleRows.querySelectorAll('.bed-row').length;
+                    const row = document.createElement('div');
+                    row.className = 'row g-3 align-items-center bed-row mb-2';
+                    row.innerHTML = `
+                                                                                                        <div class="col-md-6">
+                                                                                                            <label class="form-label mb-1">Loại giường</label>
+                                                                                                            <select name="Beds[${idx}].Type" class="form-select form-select-sm">
+                                                                                                                ${bedTypes.map(b => `<option ${b === type ? 'selected' : ''}>${b}</option>`).join('')}
+                                                                                                            </select>
+                                                                                                        </div>
+                                                                                                        <div class="col-md-6">
+                                                                                                            <label class="form-label mb-1">Số lượng giường</label>
+                                                                                                            <input name="Beds[${idx}].Count" type="number" min="1" value="${count}" class="form-control form-control-sm" placeholder="Nhập số">
+                                                                                                        </div>`;
+                    singleRows.appendChild(row);
+                }
+                function ensureSingle() { if (!singleRows.querySelector('.bed-row')) addSingleBedRow(); }
+                btnAddSingleBed?.addEventListener('click', () => addSingleBedRow());
+
+                function addBedRowToBedroom(card, type = bedTypes[0], count = '') {
+                    const bedRows = card.querySelector('.bed-rows');
+                    const i = +card.dataset.index;
+                    const j = bedRows.querySelectorAll('.bed-row').length;
+                    const row = document.createElement('div');
+                    row.className = 'row g-3 align-items-center bed-row mb-2';
+                    row.innerHTML = `
+                                                                                                        <div class="col-md-6">
+                                                                                                            <label class="form-label mb-1">Loại giường</label>
+                                                                                                            <select name="Bedrooms[${i}].Beds[${j}].Type" class="form-select form-select-sm">
+                                                                                                                ${bedTypes.map(b => `<option ${b === type ? 'selected' : ''}>${b}</option>`).join('')}
+                                                                                                            </select>
+                                                                                                        </div>
+                                                                                                        <div class="col-md-6">
+                                                                                                            <label class="form-label mb-1">Số lượng giường</label>
+                                                                                                            <input name="Bedrooms[${i}].Beds[${j}].Count" type="number" min="1" value="${count}" class="form-control form-control-sm" placeholder="Nhập số">
+                                                                                                        </div>`;
+                    bedRows.appendChild(row);
+                }
+                function createBedroom(index) {
+                    const card = document.createElement('div');
+                    card.className = 'bed-box rounded-3 p-3 mb-3 bedroom';
+                    card.dataset.index = index;
+
+                    // Thêm nút xóa cho phòng ngủ từ thứ 3 trở đi
+                    const deleteButton = index >= 2 ?
+                        `<button type="button" class="btn btn-outline-danger btn-sm js-remove-bedroom" style="position: absolute; top: 10px; right: 10px;">
+                                                                                        <i class="bi bi-trash3-fill me-1"></i>Xóa phòng ngủ
+                                                                                     </button>` : '';
+
+                    card.innerHTML = `
+                                                                                    <div class="position-relative">
+                                                                                        ${deleteButton}
+                                                                                        <div class="mb-2 fw-semibold"><i class="bi bi-plus-square-dotted me-2"></i>${index + 1} phòng ngủ</div>
+                                                                                        <div class="bed-rows"></div>
+                                                                                        <button type="button" class="btn btn-outline-primary btn-sm mt-2 js-add-bed">+ Thêm loại giường khác</button>
+                                                                                    </div>`;
+                    bedroomsContainer.appendChild(card);
+                    addBedRowToBedroom(card);
+                }
+                btnAddBedroom?.addEventListener('click', () => {
+                    // Đếm chính xác số phòng ngủ hiện có
+                    const currentCount = bedroomsContainer.querySelectorAll('.bedroom').length;
+                    createBedroom(currentCount);
+                });
+                bedroomsContainer?.addEventListener('click', (e) => {
+                    // Xử lý thêm loại giường khác
+                    const addBedBtn = e.target.closest('.js-add-bed');
+                    if (addBedBtn) {
+                        const card = addBedBtn.closest('.bedroom');
+                        addBedRowToBedroom(card);
+                        return;
+                    }
+
+                    // Xử lý xóa phòng ngủ
+                    const removeBedroomBtn = e.target.closest('.js-remove-bedroom');
+                    if (removeBedroomBtn) {
+                        const card = removeBedroomBtn.closest('.bedroom');
+                        if (confirm('Bạn có chắc muốn xóa phòng ngủ này?')) {
+                            card.remove();
+                            // Reindex lại các phòng ngủ còn lại
+                            [...bedroomsContainer.querySelectorAll('.bedroom')].forEach((bedroom, newIndex) => {
+                                bedroom.dataset.index = newIndex;
+                                const title = bedroom.querySelector('.fw-semibold');
+                                if (title) {
+                                    title.innerHTML = `<i class="bi bi-plus-square-dotted me-2"></i>${newIndex + 1} phòng ngủ`;
+                                }
+                                // Cập nhật name attribute cho các input
+                                bedroom.querySelectorAll('[name^="Bedrooms["]').forEach(input => {
+                                    input.name = input.name.replace(/Bedrooms\[\d+\]/, `Bedrooms[${newIndex}]`);
+                                });
+                                // Ẩn/hiện nút xóa dựa trên index mới
+                                const deleteBtn = bedroom.querySelector('.js-remove-bedroom');
+                                if (deleteBtn) {
+                                    deleteBtn.style.display = newIndex >= 2 ? 'block' : 'none';
+                                }
+                            });
+                        }
+                        return;
+                    }
+                });
+
+                function showSingle() {
+                    singleBox.classList.remove('d-none');
+                    multiBox.classList.add('d-none');
+                    setDisabled(singleBox, false); setDisabled(multiBox, true);
+                    ensureSingle();
+                }
+                function showMulti() {
+                    singleBox.classList.add('d-none');
+                    multiBox.classList.remove('d-none');
+                    setDisabled(singleBox, true); setDisabled(multiBox, false);
+                    // Chỉ tạo 2 phòng ngủ mặc định nếu chưa có
+                    if (!bedroomsContainer.querySelector('.bedroom')) {
+                        createBedroom(0);
+                        createBedroom(1);
+                    }
+                }
+                document.querySelectorAll('input[name="IsSingleBedroom"]').forEach(r => r.addEventListener('change', () => {
+                    const isSingle = document.querySelector('input[name="IsSingleBedroom"][value="true"]').checked;
+                    isSingle ? showSingle() : showMulti();
+                }));
+
+                const startSingle = document.querySelector('input[name="IsSingleBedroom"][value="true"]').checked;
+                startSingle ? showSingle() : showMulti();
+            })();
+
+            // ===== Multi bedroom logic =====
+            // Xóa logic cũ này vì đã có trong function bedSetup() ở trên
+
+            // ===== Format SecurityDeposit with dot separators =====
+            (function formatSecurityDeposit() {
+                const hidden = document.getElementById('SecurityDeposit');
+                const display = document.getElementById('SecurityDepositDisplay');
+                if (!hidden || !display) return;
+
+                // init from model value
+                const raw = hidden.value || '';
+                if (raw) { display.value = numberToDots(raw); }
+
+                display.addEventListener('input', () => {
+                    const digits = display.value.replace(/[^0-9]/g, '');
+                    hidden.value = digits; // store pure number
+                    display.value = numberToDots(digits);
+                });
+
+                function numberToDots(nStr) {
+                    if (!nStr) return '';
+                    return nStr.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+                }
+            })();
+
+            // ===== Client validation for photos & price =====
+            (function requiredPhotosAndPrice() {
+                const form = document.getElementById('roomForm');
+                if (!form) return;
+                const bedroomUpload = document.getElementById('bedroomUpload');
+                const bathroomUpload = document.getElementById('bathroomUpload');
+                const bedErr = document.getElementById('bedroomError');
+                const bathErr = document.getElementById('bathroomError');
+                const hiddenPrice = document.getElementById('SecurityDeposit');
+
+                function setZoneError(zone, errEl, hasError) {
+                    if (hasError) {
+                        zone.style.borderColor = '#dc3545';
+                        zone.style.borderStyle = 'dashed';
+                        errEl?.classList.remove('d-none');
+                    } else {
+                        zone.style.borderColor = '#dee2e6';
+                        zone.style.borderStyle = 'dashed';
+                        errEl?.classList.add('d-none');
+                    }
+                }
+
+                function hasPhoto(zone) {
+                    return zone.querySelector('.additional-photo-item img') != null; // when previewed
+                }
+
+                form.addEventListener('submit', (e) => {
+                    let invalid = false;
+
+                    // price
+                    const priceMissing = !hiddenPrice || !hiddenPrice.value || hiddenPrice.value === '0';
+                    if (priceMissing) {
+                        document.getElementById('SecurityDepositDisplay')?.classList.add('is-invalid');
+                        invalid = true;
+                    } else {
+                        document.getElementById('SecurityDepositDisplay')?.classList.remove('is-invalid');
+                    }
+
+                    // bedroom photo
+                    const bedMissing = !hasPhoto(bedroomUpload);
+                    setZoneError(bedroomUpload, bedErr, bedMissing);
+                    if (bedMissing) invalid = true;
+
+                    // bathroom photo
+                    const bathMissing = !hasPhoto(bathroomUpload);
+                    setZoneError(bathroomUpload, bathErr, bathMissing);
+                    if (bathMissing) invalid = true;
+
+                    if (invalid) {
+                        e.preventDefault();
+                        // scroll to first error
+                        const target = document.querySelector('.is-invalid, #bedroomError:not(.d-none), #bathroomError:not(.d-none)');
+                        target?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                });
+            })();
+        })();
+    </script>
+}
+
+<style>
+    /* ===== Sidebar (giống ảnh) ===== */
+    .step-nav.card {
+        border: none;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .step-nav .card-body {
+        padding: 0;
+    }
+
+    /* Header nhóm dạng "pill" + chevron */
+    .step-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 16px;
+        margin: 0 0 10px 0;
+        background: #fff;
+        border: 1px solid #eef1f5;
+        border-radius: 28px;
+        font-weight: 700;
+        color: #111827;
+        box-shadow: 0 2px 8px rgba(13, 110, 253, .06);
+    }
+
+    .step-title::after {
+        content: "";
+        width: 16px;
+        height: 16px;
+        flex: 0 0 16px;
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'><path fill='%236c757d' d='M6 3l5 5-5 5z'/></svg>");
+        background-size: 16px 16px;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+
+    .wizard-steps {
+        list-style: none;
+        margin: 0 0 12px 0;
+        padding: .25rem 0 .75rem 12px;
+    }
+
+    .wizard-steps li {
+        padding: .4rem 1rem;
+        border-left: 3px solid transparent;
+        border-radius: 10px;
+    }
+
+    .wizard-steps li:hover {
+        background: #f6f8fb;
+    }
+
+    .wizard-steps a {
+        text-decoration: none;
+        color: #495057;
+        display: block;
+    }
+
+    /* Mục đang active: chữ xanh + vạch xanh bên trái */
+    .wizard-steps li.active {
+        background: #f8f9fb;
+        border-left-color: #0d6efd;
+    }
+
+    .wizard-steps li.active a {
+        color: #0d6efd;
+        font-weight: 600;
+    }
+
+    /* ===== Cards bên phải ===== */
+    .card-slim {
+        border: 1px solid #eef1f5;
+        border-radius: 10px;
+        box-shadow: none;
+    }
+
+    .card-slim .card-header {
+        background: #fff;
+        border-bottom: 1px solid #eef1f5;
+    }
+
+    /* Viền xanh + bóng nhẹ cho section đang focus (y như ảnh) */
+    .card-highlight {
+        border: 2px solid #80b6ff !important;
+        box-shadow: 0 0 0 3px rgba(13, 110, 253, .15), 0 1px 2px rgba(0, 0, 0, .05) !important;
+    }
+
+    /* Input nhỏ gọn */
+    .ui-compact .form-control,
+    .ui-compact .form-select {
+        height: 36px;
+        padding: .35rem .5rem;
+        font-size: 14px;
+        border-radius: 8px;
+    }
+
+    /* Action bar */
+    .action-bar {
+        position: sticky;
+        bottom: 8px;
+        left: 0;
+        right: 0;
+        background: transparent;
+        padding: 0;
+        border-top: none;
+        z-index: 10;
+    }
+
+    /* Khi cuộn đến anchor không bị che bởi header */
+    section[id^="sec-"] {
+        scroll-margin-top: 96px;
+    }
+
+    /* Card kiểu Traveloka */
+    .tera-card {
+        background: #fff;
+        border: 1px solid #eef1f5;
+        border-radius: 12px;
+        padding: 22px 22px 18px;
+        box-shadow: none;
+    }
+
+    /* Tiêu đề & mô tả section */
+    .tera-title {
+        font-size: 20px;
+        line-height: 1.25;
+        font-weight: 700;
+        margin: 0 0 .25rem 0;
+        color: #111827;
+    }
+
+    .tera-desc {
+        margin: 0 0 14px 0;
+        color: #6b7280;
+    }
+
+    /* Nhãn cột trái to hơn, đúng line-height */
+    .form-label-lg {
+        font-size: 15px;
+        font-weight: 800;
+        color: #0b0e11;
+        letter-spacing: .1px;
+    }
+
+    /* Nhãn trong các hàng bên phải cũng đậm, thanh hơn */
+    #sec-info .form-label,
+    #sec-detail .form-label {
+        font-weight: 700;
+        color: #0b0e11;
+        letter-spacing: .1px;
+    }
+
+    /* Label radio đậm hơn một nhịp */
+    #sec-detail .form-check-label {
+        font-weight: 600;
+        color: #0b0e11;
+    }
+
+    /* Hint nhỏ dưới label bên trái */
+    .form-hint {
+        font-size: 13px;
+        color: #6b7280;
+    }
+
+    /* Input nhỏ gọn (giữ phong cách trang) */
+    .ui-compact .form-control,
+    .ui-compact .form-select {
+        height: 40px;
+        padding: .45rem .6rem;
+        font-size: 14px;
+        border-radius: 10px;
+    }
+
+    /* Radio cảm giác đậm hơn khi chọn (giống ảnh) */
+    .form-check-input:checked {
+        background-color: #0d6efd;
+        border-color: #0d6efd;
+    }
+
+    /* Khoảng cách giữa các hàng trong section */
+    #sec-info .row>[class^="col-"],
+    #sec-detail .row>[class^="col-"] {
+        margin-top: 6px;
+    }
+
+    /* Khối input giường (nền xám nhạt) */
+    .bed-box {
+        background: #f6f8fb;
+        border: 1px solid #eef1f5;
+    }
+
+    .bed-box .btn {
+        margin-top: 10px;
+    }
+
+    /* Nút xóa phòng ngủ */
+    .js-remove-bedroom {
+        font-size: 12px;
+        padding: 4px 8px;
+        border-radius: 6px;
+        color: #dc3545;
+        border-color: #dc3545;
+        background: transparent;
+    }
+
+    .js-remove-bedroom:hover {
+        background-color: #dc3545;
+        color: white;
+    }
+
+    /* Tiện nghi phòng - thanh cuộn */
+    .amenities-container {
+        max-height: 400px;
+        overflow-y: auto;
+        padding-right: 8px;
+        border: 1px solid #eef1f5;
+        border-radius: 8px;
+        background: #fafcff;
+    }
+
+    .amenities-container::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .amenities-container::-webkit-scrollbar-track {
+        background: #f1f3f4;
+        border-radius: 3px;
+    }
+
+    .amenities-container::-webkit-scrollbar-thumb {
+        background: #c1c7cd;
+        border-radius: 3px;
+    }
+
+    .amenities-container::-webkit-scrollbar-thumb:hover {
+        background: #a8b3bc;
+    }
+
+    .amenity-group {
+        padding: 16px;
+        border-bottom: 1px solid #eef1f5;
+    }
+
+    .amenity-group:last-child {
+        border-bottom: none;
+    }
+
+    .group-title {
+        font-weight: 700;
+        color: #0b0e11;
+        font-size: 15px;
+        margin-bottom: 12px;
+    }
+
+    .amenity-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 8px;
+    }
+
+    .amenity-item {
+        margin-bottom: 8px;
+    }
+
+    .amenity-item .form-check {
+        margin: 0;
+    }
+
+    .amenity-item .form-check-label {
+        font-size: 14px;
+        color: #374151;
+        font-weight: 500;
+        cursor: pointer;
+    }
+
+    .amenity-item .form-check-input {
+        margin-top: 2px;
+    }
+
+    .amenity-item .form-check-input:checked {
+        background-color: #0d6efd;
+        border-color: #0d6efd;
+    }
+
+    /* Khu vực tải ảnh */
+    .upload-zone {
+        border: 2px dashed #dee2e6;
+        border-radius: 8px;
+        padding: 20px;
+        text-align: center;
+        background: #f8f9fa;
+        position: relative;
+        min-height: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .upload-zone:hover {
+        border-color: #0d6efd;
+        background: #f0f8ff;
+    }
+
+    .upload-zone .upload-content {
+        pointer-events: none;
+        width: 100%;
+    }
+
+    .upload-zone .upload-input {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    .upload-zone .bi-camera {
+        color: #6c757d;
+        font-size: 48px;
+    }
+
+    .upload-zone h6 {
+        color: #495057;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .upload-zone .btn-link {
+        text-decoration: none;
+        font-size: 14px;
+    }
+
+    /* Ảnh trong upload zone cũng dùng style giống additional photos */
+    .upload-zone .additional-photo-item {
+        width: 100%;
+        height: 100%;
+        min-height: 160px;
+    }
+
+    .upload-zone .additional-photo-item img {
+        width: 100%;
+        height: 100%;
+        min-height: 160px;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+
+    /* Nút Xem trước và Xóa trong khu vực Bedroom/Bathroom */
+    .upload-zone .btn-preview,
+    .upload-zone .btn-delete {
+        font-size: 12px;
+        padding: 4px 8px;
+        border-radius: 6px;
+    }
+
+    .upload-zone .btn-preview {
+        background: #0d6efd;
+        border-color: #0d6efd;
+        color: white;
+    }
+
+    .upload-zone .btn-delete {
+        background: #dc3545;
+        border-color: #dc3545;
+        color: white;
+    }
+
+    .upload-zone .btn-preview:hover,
+    .upload-zone .btn-delete:hover {
+        opacity: 0.9;
+    }
+
+    /* Badge số lượng ảnh */
+    .upload-zone .badge {
+        font-size: 11px;
+        padding: 4px 6px;
+    }
+
+    /* Dropdown category */
+    .upload-zone .form-select {
+        font-size: 12px;
+        padding: 4px 8px;
+        border-radius: 6px;
+        min-width: 120px;
+    }
+
+    /* Khu vực tải ảnh thêm - lớn hơn */
+    .upload-zone-large {
+        min-height: 150px;
+        padding: 30px 20px;
+        background: #f8f9fa;
+        border: 2px dashed #dee2e6;
+    }
+
+    .upload-zone-large:hover {
+        border-color: #0d6efd;
+        background: #f0f8ff;
+    }
+
+    .upload-zone-large .bi-camera {
+        font-size: 36px;
+    }
+
+    .upload-zone-large h6 {
+        font-size: 16px;
+        margin-bottom: 6px;
+    }
+
+    .upload-zone-large small {
+        font-size: 13px;
+        color: #6c757d;
+    }
+
+    /* Thumbnail grid cho ảnh bổ sung */
+    .additional-photo-item {
+        position: relative;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    .additional-photo-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    }
+
+    .additional-photo-item img {
+        width: 100%;
+        height: 120px;
+        object-fit: cover;
+        display: block;
+    }
+
+    .additional-photo-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .additional-photo-item:hover .additional-photo-overlay {
+        opacity: 1;
+    }
+
+    .additional-photo-overlay .btn {
+        padding: 6px 12px;
+        font-size: 12px;
+        border-radius: 6px;
+    }
+
+    .additional-photo-overlay .btn-preview {
+        background: #0d6efd;
+        border-color: #0d6efd;
+        color: white;
+    }
+
+    .additional-photo-overlay .btn-delete {
+        background: #dc3545;
+        border-color: #dc3545;
+        color: white;
+    }
+
+    .additional-photo-overlay .btn:hover {
+        opacity: 0.9;
+    }
+
+    /* Modal preview ảnh */
+    .photo-preview-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.9);
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .photo-preview-modal img {
+        max-height: 90vh;
+        max-width: 90vw;
+        object-fit: contain;
+    }
+
+    .photo-preview-modal .btn-close {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: white;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .photo-preview-modal .btn-close:hover {
+        background: #f8f9fa;
+        transform: scale(1.1);
+    }
+
+    .photo-requirements {
+        background: #f8f9fa;
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+        padding: 16px;
+    }
+
+    .photo-requirements ul li {
+        margin-bottom: 4px;
+    }
+</style>
+<style>
+    /* Nền trang theo yêu cầu */
+    body {
+        background-color: #F2F4F7;
+    }
+</style>

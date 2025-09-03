@@ -1,0 +1,141 @@
+is_global = true
+build_property.TargetFramework = net8.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = HotelBooking
+build_property.RootNamespace = HotelBooking
+build_property.ProjectDir = /Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.RazorLangVersion = 8.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = /Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking
+build_property._RazorSourceGeneratorDebug = 
+build_property.EffectiveAnalysisLevelStyle = 8.0
+build_property.EnableCodeStyleSeverity = 
+
+[/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/Areas/Admin/Views/Account/Login.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXMvQWRtaW4vVmlld3MvQWNjb3VudC9Mb2dpbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/Areas/Admin/Views/Dashboard/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXMvQWRtaW4vVmlld3MvRGFzaGJvYXJkL0RldGFpbHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/Areas/Admin/Views/Dashboard/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXMvQWRtaW4vVmlld3MvRGFzaGJvYXJkL0luZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/Areas/Admin/Views/Dashboard/RejectWithReason.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXMvQWRtaW4vVmlld3MvRGFzaGJvYXJkL1JlamVjdFdpdGhSZWFzb24uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/Areas/Admin/Views/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXMvQWRtaW4vVmlld3MvX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/Views/Account/AccessDenied.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWNjb3VudC9BY2Nlc3NEZW5pZWQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/Views/Account/Login.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWNjb3VudC9Mb2dpbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/Views/Account/Register.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWNjb3VudC9SZWdpc3Rlci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/Views/Home/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvSG9tZS9JbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/Views/Home/Privacy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvSG9tZS9Qcml2YWN5LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/Views/Manage/ChangePassword.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTWFuYWdlL0NoYW5nZVBhc3N3b3JkLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/Views/Manage/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTWFuYWdlL0VkaXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/Views/Manage/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTWFuYWdlL0luZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/Views/Partner/Contact.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUGFydG5lci9Db250YWN0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/Views/Partner/Contract.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUGFydG5lci9Db250cmFjdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/Views/Partner/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUGFydG5lci9JbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/Views/Partner/MyProperties.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUGFydG5lci9NeVByb3BlcnRpZXMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/Views/Partner/Onboarding.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUGFydG5lci9PbmJvYXJkaW5nLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/Views/Partner/Payment.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUGFydG5lci9QYXltZW50LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/Views/Partner/PropertyData.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUGFydG5lci9Qcm9wZXJ0eURhdGEuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/Views/Partner/PropertyDetail.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUGFydG5lci9Qcm9wZXJ0eURldGFpbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/Views/Partner/Review.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUGFydG5lci9SZXZpZXcuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/Views/Partner/RoomData.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUGFydG5lci9Sb29tRGF0YS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/Views/Partner/Start.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUGFydG5lci9TdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/Views/Partner/Success.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUGFydG5lci9TdWNjZXNzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/Views/Shared/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL0Vycm9yLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/Views/Shared/_ValidationScriptsPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/Views/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/Views/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvX1ZpZXdTdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/Views/Shared/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19MYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = b-klu4p4gv3z

@@ -1,0 +1,317 @@
+{
+  "Files": [
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/obj/Debug/net8.0/scopedcss/projectbundle/HotelBooking.bundle.scp.css",
+      "PackagePath": "staticwebassets/HotelBooking.zd479lcd6z.bundle.scp.css"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/css/site.css",
+      "PackagePath": "staticwebassets/css/site.css"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/favicon.ico",
+      "PackagePath": "staticwebassets/favicon.ico"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/js/home-index.js",
+      "PackagePath": "staticwebassets/js/home-index.js"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/js/site.js",
+      "PackagePath": "staticwebassets/js/site.js"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/lib/bootstrap/LICENSE",
+      "PackagePath": "staticwebassets/lib/bootstrap"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/lib/bootstrap/dist/css/bootstrap-grid.css",
+      "PackagePath": "staticwebassets/lib/bootstrap/dist/css/bootstrap-grid.css"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/lib/bootstrap/dist/css/bootstrap-grid.css.map",
+      "PackagePath": "staticwebassets/lib/bootstrap/dist/css/bootstrap-grid.css.map"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/lib/bootstrap/dist/css/bootstrap-grid.min.css",
+      "PackagePath": "staticwebassets/lib/bootstrap/dist/css/bootstrap-grid.min.css"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/lib/bootstrap/dist/css/bootstrap-grid.min.css.map",
+      "PackagePath": "staticwebassets/lib/bootstrap/dist/css/bootstrap-grid.min.css.map"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/lib/bootstrap/dist/css/bootstrap-grid.rtl.css",
+      "PackagePath": "staticwebassets/lib/bootstrap/dist/css/bootstrap-grid.rtl.css"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/lib/bootstrap/dist/css/bootstrap-grid.rtl.css.map",
+      "PackagePath": "staticwebassets/lib/bootstrap/dist/css/bootstrap-grid.rtl.css.map"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/lib/bootstrap/dist/css/bootstrap-grid.rtl.min.css",
+      "PackagePath": "staticwebassets/lib/bootstrap/dist/css/bootstrap-grid.rtl.min.css"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/lib/bootstrap/dist/css/bootstrap-grid.rtl.min.css.map",
+      "PackagePath": "staticwebassets/lib/bootstrap/dist/css/bootstrap-grid.rtl.min.css.map"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/lib/bootstrap/dist/css/bootstrap-reboot.css",
+      "PackagePath": "staticwebassets/lib/bootstrap/dist/css/bootstrap-reboot.css"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/lib/bootstrap/dist/css/bootstrap-reboot.css.map",
+      "PackagePath": "staticwebassets/lib/bootstrap/dist/css/bootstrap-reboot.css.map"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/lib/bootstrap/dist/css/bootstrap-reboot.min.css",
+      "PackagePath": "staticwebassets/lib/bootstrap/dist/css/bootstrap-reboot.min.css"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/lib/bootstrap/dist/css/bootstrap-reboot.min.css.map",
+      "PackagePath": "staticwebassets/lib/bootstrap/dist/css/bootstrap-reboot.min.css.map"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/lib/bootstrap/dist/css/bootstrap-reboot.rtl.css",
+      "PackagePath": "staticwebassets/lib/bootstrap/dist/css/bootstrap-reboot.rtl.css"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/lib/bootstrap/dist/css/bootstrap-reboot.rtl.css.map",
+      "PackagePath": "staticwebassets/lib/bootstrap/dist/css/bootstrap-reboot.rtl.css.map"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/lib/bootstrap/dist/css/bootstrap-reboot.rtl.min.css",
+      "PackagePath": "staticwebassets/lib/bootstrap/dist/css/bootstrap-reboot.rtl.min.css"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/lib/bootstrap/dist/css/bootstrap-reboot.rtl.min.css.map",
+      "PackagePath": "staticwebassets/lib/bootstrap/dist/css/bootstrap-reboot.rtl.min.css.map"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/lib/bootstrap/dist/css/bootstrap-utilities.css",
+      "PackagePath": "staticwebassets/lib/bootstrap/dist/css/bootstrap-utilities.css"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/lib/bootstrap/dist/css/bootstrap-utilities.css.map",
+      "PackagePath": "staticwebassets/lib/bootstrap/dist/css/bootstrap-utilities.css.map"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/lib/bootstrap/dist/css/bootstrap-utilities.min.css",
+      "PackagePath": "staticwebassets/lib/bootstrap/dist/css/bootstrap-utilities.min.css"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/lib/bootstrap/dist/css/bootstrap-utilities.min.css.map",
+      "PackagePath": "staticwebassets/lib/bootstrap/dist/css/bootstrap-utilities.min.css.map"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/lib/bootstrap/dist/css/bootstrap-utilities.rtl.css",
+      "PackagePath": "staticwebassets/lib/bootstrap/dist/css/bootstrap-utilities.rtl.css"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/lib/bootstrap/dist/css/bootstrap-utilities.rtl.css.map",
+      "PackagePath": "staticwebassets/lib/bootstrap/dist/css/bootstrap-utilities.rtl.css.map"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/lib/bootstrap/dist/css/bootstrap-utilities.rtl.min.css",
+      "PackagePath": "staticwebassets/lib/bootstrap/dist/css/bootstrap-utilities.rtl.min.css"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/lib/bootstrap/dist/css/bootstrap-utilities.rtl.min.css.map",
+      "PackagePath": "staticwebassets/lib/bootstrap/dist/css/bootstrap-utilities.rtl.min.css.map"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/lib/bootstrap/dist/css/bootstrap.css",
+      "PackagePath": "staticwebassets/lib/bootstrap/dist/css/bootstrap.css"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/lib/bootstrap/dist/css/bootstrap.css.map",
+      "PackagePath": "staticwebassets/lib/bootstrap/dist/css/bootstrap.css.map"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/lib/bootstrap/dist/css/bootstrap.min.css",
+      "PackagePath": "staticwebassets/lib/bootstrap/dist/css/bootstrap.min.css"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/lib/bootstrap/dist/css/bootstrap.min.css.map",
+      "PackagePath": "staticwebassets/lib/bootstrap/dist/css/bootstrap.min.css.map"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/lib/bootstrap/dist/css/bootstrap.rtl.css",
+      "PackagePath": "staticwebassets/lib/bootstrap/dist/css/bootstrap.rtl.css"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/lib/bootstrap/dist/css/bootstrap.rtl.css.map",
+      "PackagePath": "staticwebassets/lib/bootstrap/dist/css/bootstrap.rtl.css.map"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/lib/bootstrap/dist/css/bootstrap.rtl.min.css",
+      "PackagePath": "staticwebassets/lib/bootstrap/dist/css/bootstrap.rtl.min.css"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/lib/bootstrap/dist/css/bootstrap.rtl.min.css.map",
+      "PackagePath": "staticwebassets/lib/bootstrap/dist/css/bootstrap.rtl.min.css.map"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/lib/bootstrap/dist/js/bootstrap.bundle.js",
+      "PackagePath": "staticwebassets/lib/bootstrap/dist/js/bootstrap.bundle.js"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/lib/bootstrap/dist/js/bootstrap.bundle.js.map",
+      "PackagePath": "staticwebassets/lib/bootstrap/dist/js/bootstrap.bundle.js.map"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/lib/bootstrap/dist/js/bootstrap.bundle.min.js",
+      "PackagePath": "staticwebassets/lib/bootstrap/dist/js/bootstrap.bundle.min.js"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/lib/bootstrap/dist/js/bootstrap.bundle.min.js.map",
+      "PackagePath": "staticwebassets/lib/bootstrap/dist/js/bootstrap.bundle.min.js.map"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/lib/bootstrap/dist/js/bootstrap.esm.js",
+      "PackagePath": "staticwebassets/lib/bootstrap/dist/js/bootstrap.esm.js"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/lib/bootstrap/dist/js/bootstrap.esm.js.map",
+      "PackagePath": "staticwebassets/lib/bootstrap/dist/js/bootstrap.esm.js.map"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/lib/bootstrap/dist/js/bootstrap.esm.min.js",
+      "PackagePath": "staticwebassets/lib/bootstrap/dist/js/bootstrap.esm.min.js"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/lib/bootstrap/dist/js/bootstrap.esm.min.js.map",
+      "PackagePath": "staticwebassets/lib/bootstrap/dist/js/bootstrap.esm.min.js.map"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/lib/bootstrap/dist/js/bootstrap.js",
+      "PackagePath": "staticwebassets/lib/bootstrap/dist/js/bootstrap.js"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/lib/bootstrap/dist/js/bootstrap.js.map",
+      "PackagePath": "staticwebassets/lib/bootstrap/dist/js/bootstrap.js.map"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/lib/bootstrap/dist/js/bootstrap.min.js",
+      "PackagePath": "staticwebassets/lib/bootstrap/dist/js/bootstrap.min.js"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/lib/bootstrap/dist/js/bootstrap.min.js.map",
+      "PackagePath": "staticwebassets/lib/bootstrap/dist/js/bootstrap.min.js.map"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/lib/jquery-validation-unobtrusive/LICENSE.txt",
+      "PackagePath": "staticwebassets/lib/jquery-validation-unobtrusive/LICENSE.txt"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js",
+      "PackagePath": "staticwebassets/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js",
+      "PackagePath": "staticwebassets/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/lib/jquery-validation/LICENSE.md",
+      "PackagePath": "staticwebassets/lib/jquery-validation/LICENSE.md"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/lib/jquery-validation/dist/additional-methods.js",
+      "PackagePath": "staticwebassets/lib/jquery-validation/dist/additional-methods.js"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/lib/jquery-validation/dist/additional-methods.min.js",
+      "PackagePath": "staticwebassets/lib/jquery-validation/dist/additional-methods.min.js"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/lib/jquery-validation/dist/jquery.validate.js",
+      "PackagePath": "staticwebassets/lib/jquery-validation/dist/jquery.validate.js"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/lib/jquery-validation/dist/jquery.validate.min.js",
+      "PackagePath": "staticwebassets/lib/jquery-validation/dist/jquery.validate.min.js"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/lib/jquery/LICENSE.txt",
+      "PackagePath": "staticwebassets/lib/jquery/LICENSE.txt"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/lib/jquery/dist/jquery.js",
+      "PackagePath": "staticwebassets/lib/jquery/dist/jquery.js"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/lib/jquery/dist/jquery.min.js",
+      "PackagePath": "staticwebassets/lib/jquery/dist/jquery.min.js"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/lib/jquery/dist/jquery.min.map",
+      "PackagePath": "staticwebassets/lib/jquery/dist/jquery.min.map"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/uploads/properties/17/07cbe02b63b14982a3b0ce4343f494c9.jpg",
+      "PackagePath": "staticwebassets/uploads/properties/17/07cbe02b63b14982a3b0ce4343f494c9.jpg"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/uploads/properties/17/1041424b7a4649e3b59b9a890dad80c0.jpg",
+      "PackagePath": "staticwebassets/uploads/properties/17/1041424b7a4649e3b59b9a890dad80c0.jpg"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/uploads/properties/17/2c1db20f54e547c58f517e3602cdf01e.jpg",
+      "PackagePath": "staticwebassets/uploads/properties/17/2c1db20f54e547c58f517e3602cdf01e.jpg"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/uploads/properties/17/347c3e74335f41eab8353dae886698c7.jpg",
+      "PackagePath": "staticwebassets/uploads/properties/17/347c3e74335f41eab8353dae886698c7.jpg"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/uploads/properties/17/4769d838ecd24641aa46eb446843b645.jpg",
+      "PackagePath": "staticwebassets/uploads/properties/17/4769d838ecd24641aa46eb446843b645.jpg"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/uploads/properties/17/5cfce88531504d97ac4a24f747c617a7.jpg",
+      "PackagePath": "staticwebassets/uploads/properties/17/5cfce88531504d97ac4a24f747c617a7.jpg"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/uploads/properties/17/7b199f945fb841dfa016425f5d3c4330.jpg",
+      "PackagePath": "staticwebassets/uploads/properties/17/7b199f945fb841dfa016425f5d3c4330.jpg"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/uploads/properties/17/85a0211e9c9841d18ef9cb083055c09e.jpg",
+      "PackagePath": "staticwebassets/uploads/properties/17/85a0211e9c9841d18ef9cb083055c09e.jpg"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/uploads/properties/17/aa29896f581e4cc8818f5e46658464a5.jpg",
+      "PackagePath": "staticwebassets/uploads/properties/17/aa29896f581e4cc8818f5e46658464a5.jpg"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/uploads/properties/17/b6e101f7f27942e88b3c9ef40a362ea9.jpg",
+      "PackagePath": "staticwebassets/uploads/properties/17/b6e101f7f27942e88b3c9ef40a362ea9.jpg"
+    },
+    {
+      "Id": "/Users/tranthihuyentrang/Downloads/HotelBooking 3/HotelBooking/wwwroot/uploads/properties/17/f31c7eb09326497c8ecb6356130a9730.jpg",
+      "PackagePath": "staticwebassets/uploads/properties/17/f31c7eb09326497c8ecb6356130a9730.jpg"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.HotelBooking.Microsoft.AspNetCore.StaticWebAssetEndpoints.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssetEndpoints.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.HotelBooking.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.build.HotelBooking.props",
+      "PackagePath": "build\\HotelBooking.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.buildMultiTargeting.HotelBooking.props",
+      "PackagePath": "buildMultiTargeting\\HotelBooking.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.buildTransitive.HotelBooking.props",
+      "PackagePath": "buildTransitive\\HotelBooking.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

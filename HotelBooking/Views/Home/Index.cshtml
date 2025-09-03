@@ -1,0 +1,195 @@
+﻿@{
+    ViewData["Title"] = "Trang chủ";
+}
+
+<!-- HERO + SEARCH -->
+<section class="hero py-5">
+    <div class="container">
+        <h1 class="fw-bold display-6 mb-1">Tìm chỗ nghỉ tiếp theo</h1>
+        <p class="mb-4">Tìm ưu đãi khách sạn, chỗ nghỉ dạng nhà và nhiều hơn nữa…</p>
+
+        <div class="bg-white rounded-3 p-3 search-card position-relative">
+            <form class="row g-2 align-items-center">
+                <!-- Destination -->
+                <div class="col-12 col-lg-5">
+                    <div class="input-group search-input">
+                        <span class="input-group-text"><i class="bi bi-building"></i></span>
+                        <input name="destination" class="form-control" placeholder="Ninh Bình" />
+                    </div>
+                </div>
+
+                <!-- Dates -->
+                <div class="col-6 col-lg-3">
+                    <input name="checkin" type="date" class="form-control" />
+                </div>
+                <div class="col-6 col-lg-3">
+                    <input name="checkout" type="date" class="form-control" />
+                </div>
+
+                <!-- Submit -->
+                <div class="col-12 col-lg-1 d-grid">
+                    <button type="button" class="btn btn-primary btn-lg">Tìm</button>
+                </div>
+            </form>
+
+            <!-- Guests & rooms line -->
+            <div class="row g-2 mt-2">
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="guest-dropdown position-relative">
+                        <button id="guestBtn" class="btn btn-outline-secondary w-100 d-flex justify-content-between align-items-center" type="button">
+                            <span><i class="bi bi-people"></i> <span id="guestSummary">2 người lớn · 0 trẻ em · 1 phòng</span></span>
+                            <i class="bi bi-chevron-down"></i>
+                        </button>
+
+                        <div id="guestPanel" class="guest-panel d-none">
+                            <!-- Adults -->
+                            <div class="d-flex justify-content-between align-items-center py-2">
+                                <div><strong>Người lớn</strong></div>
+                                <div class="counter input-group input-group-sm" data-target="adults">
+                                    <button class="btn btn-outline-secondary" type="button"><i class="bi bi-dash"></i></button>
+                                    <input class="form-control text-center" value="2" />
+                                    <button class="btn btn-outline-secondary" type="button"><i class="bi bi-plus"></i></button>
+                                </div>
+                            </div>
+                            <!-- Children -->
+                            <div class="d-flex justify-content-between align-items-center py-2">
+                                <div><strong>Trẻ em</strong></div>
+                                <div class="counter input-group input-group-sm" data-target="children">
+                                    <button class="btn btn-outline-secondary" type="button"><i class="bi bi-dash"></i></button>
+                                    <input class="form-control text-center" value="0" />
+                                    <button class="btn btn-outline-secondary" type="button"><i class="bi bi-plus"></i></button>
+                                </div>
+                            </div>
+                            <!-- Rooms -->
+                            <div class="d-flex justify-content-between align-items-center py-2">
+                                <div><strong>Phòng</strong></div>
+                                <div class="counter input-group input-group-sm" data-target="rooms">
+                                    <button class="btn btn-outline-secondary" type="button"><i class="bi bi-dash"></i></button>
+                                    <input class="form-control text-center" value="1" />
+                                    <button class="btn btn-outline-secondary" type="button"><i class="bi bi-plus"></i></button>
+                                </div>
+                            </div>
+                            <div class="text-end pt-2">
+                                <button id="guestApply" class="btn btn-primary btn-sm">Xong</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6 col-lg-8 d-flex align-items-center">
+                    <div class="form-check ms-md-2">
+                        <input class="form-check-input" type="checkbox" id="flightCheck">
+                        <label class="form-check-label" for="flightCheck">Tôi đang tìm vé máy bay</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- RECENT SEARCHES -->
+<section class="container my-4">
+    <h5 class="section-title mb-3">Tìm kiếm gần đây của bạn</h5>
+    <div class="row g-3">
+        <!-- Card 1 -->
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card shadow-sm h-100">
+                <div class="row g-0">
+                    <div class="col-4">
+                        <img src="~/img/recent.jpg" class="img-fluid rounded-start object-fit-cover" style="height:100%;width:100%;" alt="">
+                    </div>
+                    <div class="col-8">
+                        <div class="card-body">
+                            <h6 class="fw-bold mb-1">Ninh Bình</h6>
+                            <small class="text-muted">8–10 tháng 8 · 2 người</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- thêm card tương tự nếu muốn -->
+    </div>
+</section>
+
+<!-- DEALS -->
+<section class="container my-4">
+    <h5 class="section-title mb-3">Ưu đãi</h5>
+    <div class="row g-3">
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card h-100 shadow-sm">
+                <img src="~/img/deal1.jpg" class="card-img-top object-fit-cover" style="height:180px;" alt="">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <h6 class="fw-bold mb-1">Ưu đãi mùa hè</h6>
+                        <span class="badge badge-hot">Giảm 20%</span>
+                    </div>
+                    <small class="text-muted">Tiết kiệm cho kỳ nghỉ tiếp theo</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card h-100 shadow-sm">
+                <img src="~/img/deal2.jpg" class="card-img-top object-fit-cover" style="height:180px;" alt="">
+                <div class="card-body">
+                    <h6 class="fw-bold mb-1">Giá tốt cuối tuần</h6>
+                    <small class="text-muted">Homestay, villa, căn hộ…</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card h-100 shadow-sm">
+                <img src="~/img/deal3.jpg" class="card-img-top object-fit-cover" style="height:180px;" alt="">
+                <div class="card-body">
+                    <h6 class="fw-bold mb-1">Thành viên được giảm thêm</h6>
+                    <small class="text-muted">Đăng nhập để nhận ưu đãi</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FEATURED -->
+<section class="container my-4">
+    <h5 class="section-title mb-3">Lưu trú độc đáo hàng đầu</h5>
+    <div class="row g-3">
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card h-100 shadow-sm">
+                <img src="~/img/nb.jpg" class="card-img-top object-fit-cover" style="height:220px;" alt="">
+                <div class="card-body">
+                    <h6 class="fw-bold mb-1">Ninh Bình</h6>
+                    <small class="text-muted">Phong cảnh thiên nhiên</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card h-100 shadow-sm">
+                <img src="~/img/dn.jpg" class="card-img-top object-fit-cover" style="height:220px;" alt="">
+                <div class="card-body">
+                    <h6 class="fw-bold mb-1">Đà Nẵng</h6>
+                    <small class="text-muted">Biển & ẩm thực</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card h-100 shadow-sm">
+                <img src="~/img/dl.jpg" class="card-img-top object-fit-cover" style="height:220px;" alt="">
+                <div class="card-body">
+                    <h6 class="fw-bold mb-1">Đà Lạt</h6>
+                    <small class="text-muted">Không khí se lạnh</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        // đặt mặc định ngày hôm nay và +2 ngày
+        const ci = document.querySelector('input[name="checkin"]');
+        const co = document.querySelector('input[name="checkout"]');
+        const today = new Date(); const two = new Date(Date.now() + 2*86400000);
+        const fmt = d => d.toISOString().slice(0,10);
+        if (ci && !ci.value) ci.value = fmt(today);
+        if (co && !co.value) co.value = fmt(two);
+    </script>
+}

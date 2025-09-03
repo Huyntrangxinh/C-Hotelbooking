@@ -1,0 +1,663 @@
+﻿@using HotelBooking.Models
+@model PropertyStep1ViewModel
+@{
+  ViewData["Title"] = "Đăng ký cơ sở lưu trú";
+
+  var typeMeta = new Dictionary<PropertyType, (string Label, string Icon, string Desc)>
+{
+{ PropertyType.Hotel, ("Khách sạn", "bi-buildings", "Cơ sở thương mại cung cấp chỗ ở & dịch vụ.") },
+{ PropertyType.Apartment, ("Căn hộ", "bi-building", "Căn hộ cho thuê nguyên căn hoặc theo phòng.") },
+{ PropertyType.Homestay, ("Homestay", "bi-house-heart", "Lưu trú nhà dân, trải nghiệm bản địa.") },
+{ PropertyType.Villa, ("Biệt thự", "bi-house", "Nhà/biệt thự riêng tư cho nhóm gia đình.") },
+{ PropertyType.Hostel, ("Hostel", "bi-people", "Giường/ký túc xá & phòng chung.") },
+{ PropertyType.GuestHouse, ("Nhà khách", "bi-house-door", "Nhà khách/nhà trọ nhỏ, ấm cúng.") },
+{ PropertyType.Resort, ("Khu nghỉ dưỡng", "bi-umbrella", "Khu nghỉ tích hợp tiện ích, giải trí.") }
+};
+  var current = typeMeta[Model.Type];
+  string currentTypeText = current.Label;
+  string currentTypeDesc = current.Desc;
+}
+<link rel="stylesheet" href="~/css/site.css" />
+
+<section class="tera-form py-4">
+  <div class="container-xxl" style="max-width:1120px">
+    <div class="row g-4">
+
+      <!-- Sidebar bước -->
+      <aside class="col-lg-3">
+        <div class="step-nav card card-slim sticky-top" style="top:12px;">
+          <div class="card-body p-0">
+            <div class="step-title">Tổng quan về cơ sở lưu trú</div>
+            <ul class="wizard-steps">
+              <li class="active"><a href="#info-section">Thông tin về cơ sở lưu trú</a></li>
+              <li><a href="#address-section">Địa chỉ cơ sở lưu trú</a></li>
+              <li><a href="#contact-section">Thông tin liên hệ với cơ sở lưu trú</a></li>
+            </ul>
+            <div class="step-title">Thanh toán</div>
+            <ul class="wizard-steps">
+              <li><a href="@Url.Action("Payment", "Partner", new { propertyId = Model.PropertyId })">Thanh toán</a></li>
+            </ul>
+            <div class="step-title">Hợp đồng</div>
+            <ul class="wizard-steps">
+              <li><a href="@Url.Action("Contract", "Partner", new { propertyId = Model.PropertyId })">Hợp đồng</a></li>
+            </ul>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Nội dung -->
+      <div class="col-lg-9">
+        <form asp-action="Onboarding" method="post" id="propForm">
+          @Html.AntiForgeryToken()
+          <input type="hidden" asp-for="PropertyId" />
+          <input type="hidden" asp-for="Type" id="TypeHidden" />
+
+          <!-- Card 1: Thông tin cơ sở -->
+          <div id="info-section" class="panel mb-4">
+            <div class="panel-body">
+              <h5 class="panel-title">Thông tin về cơ sở lưu trú</h5>
+
+              <div class="mb-3">
+                <label asp-for="Name" class="form-label">Tên cơ sở lưu trú</label>
+                <input asp-for="Name" class="form-control form-control-sm"
+                  placeholder="Nhập tên cơ sở lưu trú của bạn bằng ký tự chữ và số." />
+                <span class="text-danger small" asp-validation-for="Name"></span>
+              </div>
+
+              <div class="mb-2">
+                <label asp-for="LocalName" class="form-label">Tên cơ sở lưu trú bằng Ngôn ngữ địa phương</label>
+                <input asp-for="LocalName" class="form-control form-control-sm" id="LocalNameInput"
+                  placeholder="Nhập tên cơ sở lưu trú bằng hệ thống chữ viết địa phương của bạn."
+                  disabled="@Model.NoLocalDifferent" />
+                <span class="text-danger small" asp-validation-for="LocalName"></span>
+              </div>
+
+              <div class="form-check mb-3">
+                <input class="form-check-input" asp-for="NoLocalDifferent" id="noLocalChk" />
+                <label class="form-check-label" asp-for="NoLocalDifferent">
+                  Cơ sở lưu trú này không có tên khác trong ngôn ngữ địa phương của tôi
+                </label>
+              </div>
+
+              <div class="mb-0">
+                <label class="form-label mb-1">Loại cơ sở lưu trú</label>
+                <div class="row g-2 align-items-end">
+                  <div class="col">
+                    <div class="select-summary">
+                      <div class="fw-semibold" id="currentTypeTxt">@currentTypeText</div>
+                      <div class="small text-muted" id="currentTypeDesc">@currentTypeDesc</div>
+                    </div>
+                  </div>
+                  <div class="col-auto d-flex align-items-end">
+                    <a href="#" id="changeTypeLink" class="btn btn-outline-primary btn-sm">Chọn</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2: Địa chỉ -->
+          <div id="address-section" class="panel mb-4">
+            <div class="panel-body">
+              <h5 class="panel-title">Địa chỉ cơ sở lưu trú</h5>
+
+              <div class="mb-3">
+                <label asp-for="CountryCode" class="form-label">Quốc gia</label>
+                <select asp-for="CountryCode" class="form-select form-select-sm">
+                  <option value="">Chọn quốc gia</option>
+                  <option value="VN">Việt Nam</option>
+                  <option value="US">Hoa Kỳ</option>
+                  <option value="JP">Nhật Bản</option>
+                  <option value="KR">Hàn Quốc</option>
+                  <option value="GB">Vương quốc Anh</option>
+                </select>
+                <span class="text-danger small" asp-validation-for="CountryCode"></span>
+              </div>
+
+              <div class="mb-3">
+                <label asp-for="City" class="form-label">Vị trí</label>
+                <div class="position-relative">
+                  <i class="bi bi-search input-icon"></i>
+                  <input asp-for="City" class="form-control form-control-sm ps-5" placeholder="Tìm vị trí" />
+                </div>
+                <span class="text-danger small" asp-validation-for="City"></span>
+              </div>
+
+              <div class="mb-3">
+                <label asp-for="AddressLine" class="form-label">Địa chỉ</label>
+                <input asp-for="AddressLine" class="form-control form-control-sm" placeholder="Số nhà, đường…" />
+                <span class="text-danger small" asp-validation-for="AddressLine"></span>
+              </div>
+
+              <div class="mb-0">
+                <label asp-for="PostalCode" class="form-label">Mã bưu chính</label>
+                <input asp-for="PostalCode" class="form-control form-control-sm" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3: Phone + PIC -->
+          <div id="contact-section" class="panel mb-4">
+            <div class="panel-body">
+              <h5 class="panel-title">Số điện thoại cơ sở lưu trú</h5>
+
+              <div class="row g-2 mb-4">
+                <div class="col-4 col-md-3">
+                  <label class="form-label">Mã quốc gia</label>
+                  <select asp-for="PropertyPhoneCountryCode" class="form-select form-select-sm">
+                    <option value="+84">+84</option>
+                    <option value="+1">+1</option>
+                  </select>
+                </div>
+                <div class="col">
+                  <label asp-for="PropertyPhoneNumber" class="form-label">Số điện thoại</label>
+                  <input asp-for="PropertyPhoneNumber" class="form-control form-control-sm" placeholder="Nhập số" />
+                  <span asp-validation-for="PropertyPhoneNumber" class="text-danger small"></span>
+                </div>
+              </div>
+
+              <h5 class="panel-title mt-2">Người phụ trách cơ sở lưu trú</h5>
+              <p class="small text-muted mb-3">
+                Xin vui lòng lưu ý rằng bất kỳ hành động nào được thực hiện bởi Người phụ trách Khách sạn như được nêu
+                và ghi nhận tại đây sẽ được xem là hành động hợp pháp thay mặt cho Khách sạn.
+              </p>
+
+              <div class="row g-2 mb-3">
+                <div class="col-md-6">
+                  <label asp-for="PicFirstName" class="form-label">Tên</label>
+                  <input asp-for="PicFirstName" class="form-control form-control-sm" placeholder="Nhập tên" />
+                  <span asp-validation-for="PicFirstName" class="text-danger small"></span>
+                </div>
+                <div class="col-md-6">
+                  <label asp-for="PicLastName" class="form-label">Họ</label>
+                  <input asp-for="PicLastName" class="form-control form-control-sm" placeholder="Nhập họ" />
+                  <span asp-validation-for="PicLastName" class="text-danger small"></span>
+                </div>
+              </div>
+
+              <div class="row g-2 mb-3">
+                <div class="col-md-6">
+                  <label asp-for="PicEmail" class="form-label">Email</label>
+                  <input asp-for="PicEmail" type="email" class="form-control form-control-sm" />
+                  <span asp-validation-for="PicEmail" class="text-danger small"></span>
+                </div>
+                <div class="col-md-6">
+                  <label asp-for="PicPosition" class="form-label">Vị trí</label>
+                  <select asp-for="PicPosition" class="form-select form-select-sm">
+                    <option value="">Chọn vị trí</option>
+                    <option value="Front Office Attendant">Front Office Attendant</option>
+                    <option value="Manager">Manager</option>
+                    <option value="Owner">Owner</option>
+                    <option value="Reservation Staff">Reservation Staff</option>
+                  </select>
+                  <span asp-validation-for="PicPosition" class="text-danger small"></span>
+                </div>
+              </div>
+
+              <div class="row g-2">
+                <div class="col-4 col-md-3">
+                  <label class="form-label">Mã quốc gia</label>
+                  <select asp-for="PicPhoneCountryCode" class="form-select form-select-sm">
+                    <option value="+84">+84</option>
+                    <option value="+1">+1</option>
+                  </select>
+                </div>
+                <div class="col">
+                  <label asp-for="PicPhoneNumber" class="form-label">Số điện thoại</label>
+                  <input asp-for="PicPhoneNumber" class="form-control form-control-sm" />
+                  <span asp-validation-for="PicPhoneNumber" class="text-danger small"></span>
+                </div>
+              </div>
+
+              <div class="mt-3">
+                <button type="button" class="btn btn-light btn-sm border">+ Thêm số khác</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sticky footer -->
+          <div class="onb-sticky">
+            <div class="container-xxl d-flex justify-content-between align-items-center" style="max-width:1120px">
+              <a href="@Url.Action("MyProperties", "Partner")" class="btn btn-outline-primary btn-sm">Quay lại TERA</a>
+              <button type="submit" class="btn btn-warning btn-sm px-3"
+                style="background-color: #FF5E20; border-color: #FF5E20;">Lưu và tiếp tục</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MODAL: chọn loại cơ sở -->
+<div class="modal fade" id="typeModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content rounded-4">
+      <div class="modal-header">
+        <h5 class="modal-title">Loại cơ sở lưu trú</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row row-cols-2 row-cols-md-3 g-3 type-grid">
+          @foreach (var kv in typeMeta)
+          {
+            <div class="col">
+              <input type="radio" class="btn-check" name="TypePick" id="pick_@kv.Key" value="@kv.Key"
+                checked="@(Model.Type == kv.Key)" />
+              <label class="btn type-card w-100" for="pick_@kv.Key" data-label="@kv.Value.Label"
+                data-desc="@kv.Value.Desc">
+                <i class="bi @kv.Value.Icon type-icon"></i>
+                @kv.Value.Label
+              </label>
+            </div>
+          }
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn" data-bs-dismiss="modal">Hủy</button>
+        <button type="button" class="btn btn-primary" id="saveTypeBtn">Lưu</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+@section Scripts {
+  <partial name="_ValidationScriptsPartial" />
+  <script>
+    (() => {
+      // ====== Scroll-to + Scroll-Spy cho cột trái =====
+      const OFFSET = 96; // cao header/sticky để neo đẹp
+      const links = [...document.querySelectorAll('.wizard-steps a')];
+      const ids = ['info-section', 'address-section', 'contact-section']
+        .filter(id => document.getElementById(id));
+
+      let isAutoScrolling = false; // Flag để tránh conflict giữa click và scroll
+
+      function setActive(id) {
+        // Chỉ set active khi không phải đang auto-scroll
+        if (isAutoScrolling) return;
+
+        links.forEach(l => l.parentElement.classList.toggle('active', l.getAttribute('href') === '#' + id));
+
+        // Highlight section bên phải chỉ trong 1 giây
+        ids.forEach(secId => {
+          const el = document.getElementById(secId);
+          if (el) {
+            el.classList.remove('card-highlight');
+            if (secId === id) {
+              el.classList.add('card-highlight');
+              // Tự động bỏ highlight sau 1 giây
+              setTimeout(() => {
+                el.classList.remove('card-highlight');
+              }, 1000);
+            }
+          }
+        });
+      }
+
+      function smoothTo(href) {
+        const el = document.querySelector(href);
+        if (!el) return;
+
+        isAutoScrolling = true; // Bật flag
+
+        const top = el.getBoundingClientRect().top + window.scrollY - OFFSET;
+        window.scrollTo({ top, behavior: 'smooth' });
+
+        // Sau khi scroll xong, tắt flag và set active
+        setTimeout(() => {
+          isAutoScrolling = false;
+          const id = href.replace('#', '');
+          setActive(id);
+        }, 600); // Đợi scroll animation hoàn thành
+      }
+
+      // Click mục ở cột trái
+      links.forEach(a => a.addEventListener('click', e => {
+        e.preventDefault();
+        const target = a.getAttribute('href');
+        if (!target) return;
+
+        // Nếu là external link (không bắt đầu bằng #), cho phép navigation
+        if (!target.startsWith('#')) {
+          window.location.href = target;
+          return;
+        }
+
+        // Set active ngay lập tức khi click
+        const id = target.replace('#', '');
+        links.forEach(l => l.parentElement.classList.toggle('active', l.getAttribute('href') === target));
+
+        smoothTo(target);
+      }));
+
+      // Scroll-spy: auto bôi xanh mục tương ứng + viền xanh box
+      const observer = new IntersectionObserver((entries) => {
+        // Chỉ xử lý khi không phải đang auto-scroll
+        if (isAutoScrolling) return;
+
+        // Chọn section đang "giữa màn hình" - cải thiện logic
+        let chosen = null, min = Infinity;
+        entries.forEach(en => {
+          if (!en.isIntersecting) return;
+
+          // Tính khoảng cách từ top của section đến top của viewport
+          const rect = en.boundingClientRect;
+          const sectionTop = rect.top;
+          const sectionHeight = rect.height;
+          const viewportHeight = window.innerHeight;
+
+          // Section được coi là "active" khi phần lớn nó nằm trong viewport
+          if (sectionTop <= viewportHeight * 0.3 && sectionTop + sectionHeight >= viewportHeight * 0.3) {
+            const dist = Math.abs(sectionTop - viewportHeight * 0.3);
+            if (dist < min) {
+              min = dist;
+              chosen = en.target.id;
+            }
+          }
+        });
+
+        if (chosen) {
+          setActive(chosen);
+        }
+      }, {
+        root: null,
+        rootMargin: `-${OFFSET + 8}px 0px -55% 0px`,
+        threshold: [0, .1, .25, .5, .75, 1.0]
+      });
+
+      // Khởi tạo observer cho tất cả sections
+      ids.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) observer.observe(el);
+      });
+
+      // Khởi tạo active state
+      setActive(ids[0]);
+
+      // Tên địa phương
+      const chk = document.getElementById('noLocalChk');
+      const localInput = document.getElementById('LocalNameInput');
+      if (chk && localInput) {
+        const toggleLocal = () => { localInput.disabled = chk.checked; };
+        chk.addEventListener('change', toggleLocal);
+        toggleLocal();
+      }
+
+      // Modal chọn loại
+      const changeLink = document.getElementById('changeTypeLink');
+      const typeModalEl = document.getElementById('typeModal');
+      if (changeLink && typeModalEl) {
+        const typeModal = new bootstrap.Modal(typeModalEl);
+        changeLink.addEventListener('click', e => { e.preventDefault(); typeModal.show(); });
+        document.getElementById('saveTypeBtn')?.addEventListener('click', () => {
+          const picked = document.querySelector('input[name="TypePick"]:checked');
+          if (!picked) return;
+          document.getElementById('TypeHidden').value = picked.value;
+          const labelEl = document.querySelector("label[for='" + picked.id + "']");
+          const label = labelEl?.dataset.label ?? picked.value;
+          const desc = labelEl?.dataset.desc ?? "";
+          document.getElementById('currentTypeTxt').textContent = label;
+          document.getElementById('currentTypeDesc').textContent = desc;
+          bootstrap.Modal.getInstance(typeModalEl)?.hide();
+        });
+      }
+    })();
+  </script>
+}
+
+<style>
+  /* ====== Compact Traveloka-like look ====== */
+  .tera-form {
+    font-size: 14px
+  }
+
+  /* Panel styling */
+  .panel {
+    border: 1px solid #e7edf8;
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 1px 0 rgba(16, 24, 40, .04)
+  }
+
+  .panel-body {
+    padding: 18px
+  }
+
+  .panel-title {
+    margin-bottom: 12px;
+    font-weight: 600
+  }
+
+  /* Inputs small + rounded */
+  .form-control.form-control-sm,
+  .form-select.form-select-sm {
+    height: 40px;
+    padding: .35rem .75rem;
+    border-radius: 10px;
+    border-color: #d7e0f1;
+    font-size: 14px
+  }
+
+  .form-control:focus,
+  .form-select:focus {
+    box-shadow: 0 0 0 .2rem rgba(13, 110, 253, .12);
+    border-color: #9bbcff
+  }
+
+  /* Search icon inside input */
+  .input-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none
+  }
+
+  .ps-5 {
+    padding-left: 2.5rem !important
+  }
+
+  /* Summary block for type */
+  .select-summary {
+    padding: .6rem .75rem;
+    border: 1px solid #e7edf8;
+    border-radius: 10px;
+    background: #f9fbff;
+    min-height: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center
+  }
+
+  /* ===== Sidebar (giống RoomData) ===== */
+  .step-nav.card {
+    border: none;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .step-nav .card-body {
+    padding: 0;
+  }
+
+  /* Header nhóm dạng "pill" + chevron */
+  .step-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    margin: 0 0 10px 0;
+    background: #fff;
+    border: 1px solid #eef1f5;
+    border-radius: 28px;
+    font-weight: 700;
+    color: #111827;
+    box-shadow: 0 2px 8px rgba(13, 110, 253, .06);
+  }
+
+  .step-title::after {
+    content: "";
+    width: 16px;
+    height: 16px;
+    flex: 0 0 16px;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'><path fill='%236c757d' d='M6 3l5 5-5 5z'/></svg>");
+    background-size: 16px 16px;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  .wizard-steps {
+    list-style: none;
+    margin: 0 0 12px 0;
+    padding: .25rem 0 .75rem 12px;
+  }
+
+  .wizard-steps li {
+    padding: .4rem 1rem;
+    border-left: 3px solid transparent;
+    border-radius: 10px;
+  }
+
+  .wizard-steps li:hover {
+    background: #f6f8fb;
+  }
+
+  .wizard-steps a {
+    text-decoration: none;
+    color: #495057;
+    display: block;
+  }
+
+  /* Mục đang active: chữ xanh + vạch xanh bên trái */
+  .wizard-steps li.active {
+    background: #f8f9fb;
+    border-left-color: #0d6efd;
+  }
+
+  .wizard-steps li.active a {
+    color: #0d6efd;
+    font-weight: 600;
+  }
+
+  /* Viền xanh + bóng nhẹ cho section đang focus */
+  .card-highlight {
+    border: 2px solid #80b6ff !important;
+    box-shadow: 0 0 0 3px rgba(13, 110, 253, .15), 0 1px 2px rgba(0, 0, 0, .05) !important;
+    transition: all 0.3s ease;
+  }
+
+  /* Khi cuộn đến anchor không bị che bởi header */
+  div[id$="-section"] {
+    scroll-margin-top: 96px;
+    transition: all 0.3s ease;
+    /* Đảm bảo không bị nhảy khi thêm/bớt border */
+    border: 1px solid transparent;
+  }
+
+  /* Panel styling - cải thiện để không bị nhảy */
+  .panel {
+    border: 1px solid #e7edf8;
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 1px 0 rgba(16, 24, 40, .04);
+    transition: all 0.3s ease;
+    /* Đảm bảo kích thước ổn định */
+    min-height: 200px;
+  }
+
+  /* Type modal cards */
+  .type-card {
+    border: 1px solid #e7edf8;
+    border-radius: 12px;
+    background: #fff;
+    padding: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: flex-start
+  }
+
+  .type-card:hover {
+    border-color: #bcd0ff;
+    background: #f8fbff
+  }
+
+  .btn-check:checked+.type-card {
+    border-color: #0d6efd;
+    background: #f0f6ff
+  }
+
+  .type-icon {
+    font-size: 18px
+  }
+
+  /* Sticky footer */
+  .onb-sticky {
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border-top: 1px solid #e9ecef;
+    padding: 10px 0;
+    z-index: 50;
+    box-shadow: 0 -2px 8px rgba(16, 24, 40, .05)
+  }
+
+  .btn.btn-warning.btn-sm,
+  .btn-outline-secondary.btn-sm {
+    border-radius: 10px
+  }
+
+  /* Đồng bộ màu nút lưu thành #FF5E20 */
+  .btn-warning {
+    background-color: #FF5E20 !important;
+    border-color: #FF5E20 !important;
+    color: white !important;
+  }
+
+  .btn-warning:hover {
+    background-color: #e5551d !important;
+    border-color: #e5551d !important;
+    color: white !important;
+  }
+
+  .btn-warning:focus {
+    background-color: #FF5E20 !important;
+    border-color: #FF5E20 !important;
+    box-shadow: 0 0 0 0.2rem rgba(255, 94, 32, 0.25) !important;
+  }
+
+  /* Fine tweaks */
+  .form-check-input {
+    width: 16px;
+    height: 16px;
+    margin-top: .2rem
+  }
+
+  .form-check-label {
+    font-size: 14px
+  }
+
+  /* Override all dots and circles from any CSS */
+  .stepper-nav .accordion-button::before,
+  .stepper-nav .accordion-button::after {
+    display: none !important;
+  }
+
+  .stepper-sub-steps li::before,
+  .stepper-sub-steps li::after {
+    display: none !important;
+  }
+
+  .stepper-sub-steps {
+    border-left: none !important;
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+  }
+
+  .stepper-sub-steps li {
+    padding-left: 0 !important;
+  }
+</style>

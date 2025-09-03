@@ -1,0 +1,456 @@
+﻿@{
+    var appTitle = "Booking.com";
+}
+@using Microsoft.AspNetCore.Identity
+@using HotelBooking.Models
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] - @appTitle</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    
+    <style>
+        .notification-dropdown {
+            width: 400px !important;
+            max-height: 500px !important;
+            overflow-y: auto;
+            margin-top: 0 !important;
+            transform: none !important;
+            top: 100% !important;
+            left: auto !important;
+            right: 0 !important;
+        }
+        
+        .notification-item {
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .notification-item:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .notification-item:not(.text-muted) {
+            background-color: #e3f2fd;
+        }
+        
+        .notification-badge {
+            font-size: 0.7rem;
+            top: 0;
+            right: 0;
+        }
+        
+        /* Styling cho tabs */
+        .nav-tabs .nav-link {
+            border: none;
+            color: #6c757d;
+            font-size: 0.9rem;
+            padding: 0.5rem 1rem;
+        }
+        
+        .nav-tabs .nav-link.active {
+            color: #0d6efd;
+            border-bottom: 2px solid #0d6efd;
+            background: none;
+        }
+        
+        .nav-tabs .nav-link:hover {
+            border-color: transparent;
+            color: #0d6efd;
+        }
+        
+        /* Styling cho notification groups */
+        .notification-time-group {
+            background-color: #f8f9fa;
+        }
+        
+        .notification-time-group h6 {
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        /* Styling cho unread dot */
+        .badge.bg-primary.rounded-circle {
+            width: 8px;
+            height: 8px;
+            min-width: 8px;
+        }
+        
+        /* Styling cho notification content */
+        .notification-item h6 {
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        .notification-item p {
+            font-size: 0.8rem;
+            line-height: 1.3;
+        }
+        
+        .notification-item small {
+            font-size: 0.75rem;
+        }
+        
+        /* Đảm bảo dropdown hiển thị đúng vị trí */
+        .dropdown-menu-end {
+            right: 0 !important;
+            left: auto !important;
+        }
+        
+        /* Sửa vị trí cho notification bell */
+        .nav-item .dropdown-menu {
+            position: absolute !important;
+            top: 100% !important;
+            left: auto !important;
+            right: 0 !important;
+            transform: none !important;
+        }
+    </style>
+    
+    @await RenderSectionAsync("Head", required: false)
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-brand">
+        <div class="container">
+            <a class="navbar-brand fw-bold" asp-controller="Home" asp-action="Index">Booking.com</a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
+                    aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div id="mainNav" class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link active" asp-area="" asp-controller="Home" asp-action="Index">
+                            <i class="bi bi-houses"></i> Lưu trú
+                        </a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-airplane"></i> Chuyến bay</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-car-front"></i> Thuê xe</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-question-circle"></i> Trợ giúp</a></li>
+
+                    @{
+                        var isPartner = string.Equals(
+                        ViewContext.RouteData.Values["controller"]?.ToString(),
+                        "Partner", StringComparison.OrdinalIgnoreCase);
+                    }
+                    @if (User.IsInRole("Staff"))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link host-post-link @(ViewContext.RouteData.Values["area"]?.ToString() == "Admin" ? "active" : "")"
+                               asp-area="Admin" asp-controller="Dashboard" asp-action="Index">
+                                <i class="bi bi-shield-lock-fill"></i> Admin Dashboard
+                            </a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link host-post-link @(isPartner ? "active" : "")"
+                               asp-area="" asp-controller="Partner" asp-action="Index">
+                                <i class="bi bi-building"></i> Đăng chỗ nghỉ của Quý vị
+                            </a>
+                        </li>
+                    }
+
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        // Lấy thông tin người dùng một cách an toàn
+                        var me = await UserManager.GetUserAsync(User);
+                        string displayName = me?.FullName ?? me?.Email ?? User.Identity?.Name ?? "User";
+                        var initial = string.IsNullOrWhiteSpace(displayName) ? "?" : displayName.Trim()[0].ToString().ToUpper();
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link p-0 user-chip-nav dropdown-toggle"
+                               href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <span class="avatar-initial sm">@initial</span>
+                                <span class="d-none d-md-inline ms-2">
+                                    <span class="fw-bold">@displayName</span>
+                                    <small class="d-block text-white-50">Genius Cấp 1</small>
+                                </span>
+                            </a>
+
+                            <ul class="dropdown-menu dropdown-menu-end user-dropdown">
+                                <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i> Tài khoản</a></li>
+                                <li><a class="dropdown-item" href="#"><i class="bi bi-bag me-2"></i> Đặt chỗ & Chuyến đi</a></li>
+                                <li><a class="dropdown-item" href="#"><i class="bi bi-stars me-2"></i> Chương trình khách hàng thân thiết Genius</a></li>
+                                <li><a class="dropdown-item" href="#"><i class="bi bi-wallet2 me-2"></i> Tặng thưởng & Ví</a></li>
+                                <li><a class="dropdown-item" href="#"><i class="bi bi-people me-2"></i> Đánh giá</a></li>
+                                <li><a class="dropdown-item" href="#"><i class="bi bi-heart me-2"></i> Đã lưu</a></li>
+                                
+                                <li><hr class="dropdown-divider" /></li>
+
+                                @if (User.IsInRole("Staff"))
+                                {
+                                    <li>
+                                        <a class="dropdown-item fw-bold" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">
+                                            <i class="bi bi-shield-lock-fill me-2"></i> Admin Dashboard
+                                        </a>
+                                    </li>
+                                }
+                                else if (ViewBag.UserHasProperties == true)
+                                {
+                                    <li>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Partner" asp-action="MyProperties">
+                                            <i class="bi bi-shop-window me-2"></i> Cơ sở lưu trú của bạn
+                                        </a>
+                                    </li>
+                                }
+
+                                <li><hr class="dropdown-divider" /></li>
+                                <li>
+                                    <form asp-area="" asp-controller="Account" asp-action="Logout" method="post">
+                                        <button type="submit" class="dropdown-item text-danger">
+                                            <i class="bi bi-box-arrow-right me-2"></i> Đăng xuất
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </li>
+                        
+                        <!-- Icon thông báo di chuyển ra ngoài cùng bên phải -->
+                        <li class="nav-item">
+                            <a class="nav-link position-relative" href="#" id="notificationBell" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-bell"></i>
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger notification-badge" style="display: none;">
+                                    0
+                                </span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end notification-dropdown" style="width: 400px; max-height: 500px; overflow-y: auto;">
+                                <li class="dropdown-header d-flex justify-content-between align-items-center p-3 border-bottom">
+                                    <h6 class="mb-0 fw-bold">Thông báo</h6>
+                                    <button class="btn btn-sm btn-outline-primary" id="markAllRead">Đánh dấu đã đọc</button>
+                                </li>
+                                
+                                <li>
+                                    <div id="notificationList">
+                                        <div class="text-center text-muted py-4">
+                                            <i class="bi bi-bell-slash"></i>
+                                            <p class="mb-0">Không có thông báo mới</p>
+                                        </div>
+                                    </div>
+                                </li>
+                                
+                                <li class="border-top p-2">
+                                    <button class="btn btn-outline-secondary w-100" id="loadMoreNotifications">
+                                        <i class="bi bi-arrow-down-circle me-2"></i>Xem thông báo trước đó
+                                    </button>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item me-2">
+                            <a asp-area="" asp-controller="Account" asp-action="Register" class="btn btn-light btn-sm ms-lg-3">Đăng ký</a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-area="" asp-controller="Account" asp-action="Login" class="btn btn-outline-light btn-sm ms-lg-2">Đăng nhập</a>
+                        </li>
+                    }
+                    </ul>
+            </div>
+        </div>
+    </nav>
+
+    @if (TempData["success"] != null)
+    {
+        <div class="container mt-3">
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @TempData["success"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+    }
+
+    <main>
+        @RenderBody()
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    
+    <script>
+        // Xử lý thông báo
+        $(document).ready(function() {
+            loadNotifications();
+            
+            // Cập nhật thông báo mỗi 30 giây
+            setInterval(loadNotifications, 30000);
+            
+            // Đánh dấu tất cả đã đọc
+            $('#markAllRead').click(function() {
+                $.post('/Notification/MarkAllAsRead', function(response) {
+                    if (response.success) {
+                        loadNotifications();
+                    }
+                });
+            });
+        });
+        
+        function loadNotifications() {
+            $.get('/Notification/GetNotifications', function(response) {
+                if (response.success) {
+                    updateNotificationBadge(response.unreadCount);
+                    updateNotificationList(response.notifications);
+                }
+            });
+        }
+        
+        function updateNotificationBadge(count) {
+            const badge = $('.notification-badge');
+            if (count > 0) {
+                badge.text(count).show();
+            } else {
+                badge.hide();
+            }
+        }
+        
+        function updateNotificationList(notifications) {
+            const list = $('#notificationList');
+            
+            if (notifications.length === 0) {
+                list.html(`
+                    <div class="text-center text-muted py-4">
+                        <i class="bi bi-bell-slash"></i>
+                        <p class="mb-0">Không có thông báo mới</p>
+                    </div>
+                `);
+                return;
+            }
+            
+            // Nhóm thông báo theo thời gian
+            const groupedNotifications = groupNotificationsByTime(notifications);
+            
+            let html = '';
+            Object.keys(groupedNotifications).forEach(timeGroup => {
+                html += `<div class="notification-time-group p-3 border-bottom">`;
+                html += `<h6 class="text-muted mb-2">${timeGroup}</h6>`;
+                
+                groupedNotifications[timeGroup].forEach(notification => {
+                    const isReadClass = notification.isRead ? 'text-muted' : 'fw-bold';
+                    const icon = getNotificationIcon(notification.type);
+                    const unreadDot = !notification.isRead ? '<span class="badge bg-primary rounded-circle ms-auto"></span>' : '';
+                    
+                    html += `
+                        <div class="notification-item ${isReadClass} d-flex align-items-start p-2 rounded" 
+                             data-notification-id="${notification.id}" 
+                             data-notification-type="${notification.type}" 
+                             data-property-id="${notification.propertyId || ''}"
+                             style="cursor: pointer;">
+                            <div class="me-3">${icon}</div>
+                            <div class="flex-grow-1">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <h6 class="mb-1">${notification.title}</h6>
+                                    ${unreadDot}
+                                </div>
+                                <p class="mb-1 small">${notification.message}</p>
+                                <small class="text-muted">${notification.createdAt}</small>
+                                ${notification.rejectionReason ? `
+                                    <div class="mt-2 p-2 bg-light rounded">
+                                        <strong>Lý do từ chối:</strong><br>
+                                        <span class="text-danger">${notification.rejectionReason}</span>
+                                    </div>
+                                ` : ''}
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                html += `</div>`;
+            });
+            
+            list.html(html);
+            
+            // Xử lý click vào thông báo
+            $('.notification-item').click(function() {
+                const notificationId = $(this).data('notification-id');
+                const notificationType = $(this).data('notification-type');
+                const propertyId = $(this).data('property-id');
+                
+                // Đánh dấu đã đọc
+                markAsRead(notificationId);
+                
+                // Chuyển hướng dựa trên loại thông báo
+                if (propertyId) {
+                    if (notificationType === 'PropertyApproved' || notificationType === 'PropertyRejected' || notificationType === 'PropertySubmitted') {
+                        // Chuyển đến trang PropertyDetail để xem chi tiết cơ sở lưu trú
+                        window.location.href = `/Partner/PropertyDetail/${propertyId}`;
+                    }
+                }
+            });
+        }
+        
+        function groupNotificationsByTime(notifications) {
+            const now = new Date();
+            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            const yesterday = new Date(today.getTime() - 24 * 60 * 60 * 1000);
+            
+            const groups = {
+                'Hôm nay': [],
+                'Hôm qua': [],
+                'Tuần này': [],
+                'Trước đó': []
+            };
+            
+            notifications.forEach(notification => {
+                const notificationDate = new Date(notification.createdAt);
+                const diffTime = now.getTime() - notificationDate.getTime();
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                
+                if (diffDays === 0) {
+                    groups['Hôm nay'].push(notification);
+                } else if (diffDays === 1) {
+                    groups['Hôm qua'].push(notification);
+                } else if (diffDays <= 7) {
+                    groups['Tuần này'].push(notification);
+                } else {
+                    groups['Trước đó'].push(notification);
+                }
+            });
+            
+            // Loại bỏ các nhóm trống
+            Object.keys(groups).forEach(key => {
+                if (groups[key].length === 0) {
+                    delete groups[key];
+                }
+            });
+            
+            return groups;
+        }
+        
+        function getNotificationIcon(type) {
+            switch(type) {
+                case 'PropertyApproved':
+                    return '<i class="bi bi-check-circle-fill text-success fs-5"></i>';
+                case 'PropertyRejected':
+                    return '<i class="bi bi-x-circle-fill text-danger fs-5"></i>';
+                case 'PropertySubmitted':
+                    return '<i class="bi bi-clock-fill text-warning fs-5"></i>';
+                default:
+                    return '<i class="bi bi-info-circle-fill text-info fs-5"></i>';
+            }
+        }
+        
+        function markAsRead(notificationId) {
+            $.post('/Notification/MarkAsRead', { notificationId: notificationId }, function(response) {
+                if (response.success) {
+                    loadNotifications();
+                }
+            });
+        }
+    </script>
+    
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

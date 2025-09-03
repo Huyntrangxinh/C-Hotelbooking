@@ -1,0 +1,235 @@
+@model HotelBooking.ViewModels.PropertyDetailViewModel
+@{
+    ViewData["Title"] = "Chi tiết cơ sở lưu trú";
+}
+
+<div class="container-xl page-tera" style="max-width:1120px;">
+    <!-- Breadcrumb / Back -->
+    <div class="d-flex align-items-center gap-2 mt-3 mb-2">
+        <a href="@Url.Action("MyProperties", "Partner")" class="text-decoration-none text-primary fw-medium">
+            <i class="bi bi-arrow-left me-1"></i>Quay lại
+        </a>
+    </div>
+
+    <!-- Status banner -->
+    <div class="banner d-flex justify-content-between align-items-center mb-3">
+        <div class="d-flex align-items-center gap-2">
+            <div class="banner-icon"><i class="bi bi-info-lg"></i></div>
+            <div>
+                <div class="banner-title">@(Model.Property.Status == PropertyStatus.Approved ? "Hồ sơ đã được phê duyệt" : "Trạng thái đăng ký")</div>
+                <div class="banner-sub">Trạng thái: <span class="badge-soft">@Model.Property.Status.ToString().ToUpper()</span></div>
+            </div>
+        </div>
+        <div class="d-none d-md-flex align-items-center gap-3">
+            <div class="text-end small text-muted">
+                Số đăng ký<br/>
+                <span class="fw-semibold">REG-@Model.Property.Id.ToString("D6")</span>
+            </div>
+            <div class="d-flex align-items-center gap-1">
+                <small class="text-muted">Bạn cần trợ giúp?</small>
+                <select class="form-select form-select-sm w-auto">
+                    <option>VI</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3">
+        <!-- Left: Status card -->
+        <div class="col-lg-4">
+            <div class="card card-soft">
+                <div class="card-header header-blue">
+                    <div class="fw-semibold text-white">Trạng thái đăng ký</div>
+                    <small class="text-white-50">Đã gửi đăng ký</small>
+                </div>
+                <div class="card-body py-3">
+                    <div class="stepper">
+                        @{
+                            var steps = new[] {
+                                new { Number = 1, Title = "Đã gửi đăng ký", Desc = "Thông tin cơ sở lưu trú đã được gửi" },
+                                new { Number = 2, Title = "Đang được xem xét", Desc = "Đang kiểm tra thông tin" },
+                                new { Number = 3, Title = Model.Property.Status == PropertyStatus.Rejected ? "Hợp đồng đã bị từ chối" : "Hợp đồng đã được phê duyệt",
+                                      Desc = Model.Property.Status == PropertyStatus.Rejected ? "Cơ sở lưu trú đã bị từ chối" : "Cơ sở lưu trú đã được chấp thuận" }
+                            };
+                            
+                            int currentStep = Model.Property.Status switch {
+                                PropertyStatus.Draft => 0,
+                                PropertyStatus.Submitted => 1,
+                                PropertyStatus.UnderReview => 2,
+                                PropertyStatus.Approved => 3,
+                                PropertyStatus.Rejected => 3,
+                                _ => 0
+                            };
+                            
+                            int completed = Model.Property.Status switch {
+                                PropertyStatus.Draft => 0,
+                                PropertyStatus.Submitted => 1,
+                                PropertyStatus.UnderReview => 2,
+                                PropertyStatus.Approved => 3,
+                                PropertyStatus.Rejected => 2,
+                                _ => 0
+                            };
+                            
+                            bool isRejected = Model.Property.Status == PropertyStatus.Rejected;
+                        }
+
+                        @for (int i = 0; i < steps.Length; i++)
+                        {
+                            var step = steps[i];
+                            bool isCompletedStep = (step.Number <= completed);
+                            bool isCurrentStep = (step.Number == currentStep) && !isRejected;
+                            bool isRejectedStep = isRejected && step.Number == 3;
+
+                            <div class="step d-flex">
+                                <div class="rail">
+                                    <div class="dot @(isRejectedStep ? "rej" : (isCompletedStep ? "done" : (isCurrentStep ? "cur" : "")))">
+                                        <span>@step.Number</span>
+                                    </div>
+                                    @if (i < steps.Length - 1)
+                                    {
+                                        <div class="line @(step.Number < completed ? "fill" : "") @(isRejected && step.Number>=2 ? "rej" : "")"></div>
+                                    }
+                                </div>
+                                <div class="content">
+                                    <div class="title @(isCurrentStep ? "fw-semibold" : "") @(isRejectedStep ? "text-danger" : "")">@step.Title</div>
+                                    <div class="desc text-muted">@step.Desc</div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="mt-2">
+                        <a class="text-primary text-decoration-none small" href="#">Giới thiệu về Trạng thái đăng ký</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right: Property info -->
+        <div class="col-lg-8">
+            <div class="card card-soft">
+                <div class="card-body p-3">
+                    <!-- Top actions -->
+                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-2 pb-2 border-bottom">
+                        <h6 class="mb-2 mb-md-0 fw-semibold">@Model.Property.Name</h6>
+                        <div>
+                            @if (Model.Property.Status == PropertyStatus.Draft)
+                            {
+                                <a href="@Url.Action("Onboarding", "Partner", new { propertyId = Model.Property.Id })" class="btn btn-primary btn-sm">
+                                    <i class="bi bi-pencil me-1"></i>Tiếp tục đăng ký
+                                </a>
+                            }
+                            else if (Model.Property.Status == PropertyStatus.Rejected)
+                            {
+                                <a href="@Url.Action("Onboarding", "Partner", new { propertyId = Model.Property.Id })" class="btn btn-primary btn-sm">
+                                    <i class="bi bi-pencil me-1"></i>Chỉnh sửa và gửi lại
+                                </a>
+                            }
+                            else if (Model.Property.Status == PropertyStatus.Approved)
+                            {
+                                <a href="@Url.Action("PropertyData", "Partner", new { propertyId = Model.Property.Id })" class="btn btn-primary btn-sm">
+                                    <i class="bi bi-gear me-1"></i>Điền thông tin về Cơ sở lưu trú và Phòng
+                                </a>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="box mb-0">
+                                <div class="box-title">Thông tin về cơ sở lưu trú</div>
+                                <div class="info">
+                                    <div class="item">
+                                        <label>Tên cơ sở lưu trú</label>
+                                        <div>@Model.Property.Name</div>
+                                    </div>
+                                    <div class="item">
+                                        <label>Loại cơ sở lưu trú</label>
+                                        <div>@Model.Property.Type.ToString()</div>
+                                    </div>
+                                    <div class="item">
+                                        <label>Địa chỉ cơ sở lưu trú</label>
+                                        <div>
+                                            @if (!string.IsNullOrEmpty(Model.Property.AddressLine)) { @Model.Property.AddressLine; }
+                                            else { <span class="text-muted">Chưa có địa chỉ</span>; }
+                                        </div>
+                                    </div>
+                                    @if (!string.IsNullOrEmpty(Model.Property.City))
+                                    {
+                                        <div class="item">
+                                            <label>Thành phố</label>
+                                            <div>@Model.Property.City</div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="map card-soft-ghost">
+                                <div class="h-100 d-flex align-items-center justify-content-center text-muted text-center">
+                                    <div>
+                                        <i class="bi bi-geo-alt fs-3 d-block mb-1"></i>
+                                        <div class="small">Bản đồ sẽ hiển thị tại đây</div>
+                                        @if (!string.IsNullOrEmpty(Model.Property.AddressLine))
+                                        {
+                                            <div class="small">@Model.Property.AddressLine</div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    @if (Model.Property.Status == PropertyStatus.Rejected && !string.IsNullOrEmpty(Model.Property.RejectionReason))
+                    {
+                        <div class="alert alert-danger mt-3 mb-0 py-2">
+                            <div class="fw-semibold mb-1"><i class="bi bi-exclamation-triangle me-1"></i>Lý do từ chối</div>
+                            <div class="small">@Model.Property.RejectionReason</div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* ===== Page tone like Traveloka ===== */
+.page-tera{font-size:14px}
+.page-tera .card-soft{border:1px solid #e9eef5;border-radius:12px;box-shadow:none;overflow:hidden;background:#fff}
+.page-tera .card-soft .card-header{background:#fff;border-bottom:1px solid #e9eef5}
+.header-blue{background:linear-gradient(135deg,#1f72ff 0%,#0d6efd 100%)!important;color:#fff;padding:.75rem 1rem}
+.banner{border:1px solid #e3ecff;background:#f5f9ff;border-radius:12px;padding:.75rem 1rem}
+.banner-icon{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#e6f0ff;color:#2f6de5;font-size:16px}
+.banner-title{font-weight:600;color:#173a76}
+.banner-sub{font-size:12px;color:#6a86bd;margin-top:2px}
+.badge-soft{background:#e6f0ff;color:#2f6de5;border-radius:999px;padding:.1rem .5rem;font-weight:600;font-size:12px}
+
+/* ===== Stepper ===== */
+.stepper{position:relative;padding-left:.25rem}
+.step{position:relative;display:flex;margin-bottom:.75rem}
+.rail{position:relative;width:28px;display:flex;flex-direction:column;align-items:center}
+.dot{width:22px;height:22px;border-radius:50%;border:2px solid #cfd6e4;background:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;color:#7c8aa0}
+.dot.done{background:#0d6efd;border-color:#0d6efd;color:#fff}
+.dot.cur{border-color:#0d6efd;color:#0d6efd;background:#fff}
+.dot.rej{background:#dc3545;border-color:#dc3545;color:#fff}
+.line{width:2px;flex:1;background:#e6eaf0;margin-top:2px;margin-bottom:2px}
+.line.fill{background:#0d6efd}
+.line.rej{background:#f0b7bd}
+.content{flex:1;padding-left:.25rem}
+.title{font-size:13px;margin-top:1px}
+.desc{font-size:12px;line-height:1.2}
+
+/* ===== Right info box ===== */
+.box-title{font-weight:600;margin-bottom:.5rem}
+.info .item{margin-bottom:.5rem}
+.info .item label{font-size:12px;color:#6c757d;margin-bottom:2px;display:block}
+.map{height:240px;border:1px solid #e9eef5;border-radius:10px;background:#fafbfe}
+
+/* Buttons / selects compact */
+.btn.btn-primary.btn-sm{padding:.3rem .6rem;border-radius:8px}
+.form-select-sm{padding:.15rem .5rem;height:32px}
+
+/* Subtle ghost surface */
+.card-soft-ghost{border:1px dashed #d7deea;background:#fafcff;border-radius:10px}
+</style>

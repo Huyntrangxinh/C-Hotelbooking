@@ -1,0 +1,56 @@
+﻿@model HotelBooking.Models.PartnerContactViewModel
+@{
+    ViewData["Title"] = "Thông tin liên lạc";
+}
+
+<section class="py-5">
+    <div class="container d-flex justify-content-center">
+        <div class="bg-white p-4 p-md-5 rounded-4 shadow-sm" style="max-width:720px;width:100%;">
+            <h4 class="fw-bold mb-1">Thông tin liên lạc</h4>
+            <p class="text-muted small mb-4">
+                Để tài khoản được bảo mật, vui lòng cung cấp họ tên đầy đủ và số điện thoại của bạn.
+            </p>
+
+            <form asp-action="Contact" method="post">
+                @Html.AntiForgeryToken()
+
+                <div class="mb-3">
+                    <label asp-for="FirstName" class="form-label"></label>
+                    <input asp-for="FirstName" class="form-control form-control-lg" />
+                    <span class="text-danger small" asp-validation-for="FirstName"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="LastName" class="form-label"></label>
+                    <input asp-for="LastName" class="form-control form-control-lg" />
+                    <span class="text-danger small" asp-validation-for="LastName"></span>
+                </div>
+
+                <div class="mb-2">
+                    <label class="form-label">Số điện thoại</label>
+                    <div class="input-group input-group-lg">
+                        <select asp-for="CountryCode" class="form-select" style="max-width:130px">
+                            <option value="+84">🇻🇳 +84</option>
+                            <option value="+1">🇺🇸 +1</option>
+                            <option value="+44">🇬🇧 +44</option>
+                            <option value="+81">🇯🇵 +81</option>
+                            <option value="+82">🇰🇷 +82</option>
+                        </select>
+                        <input asp-for="Phone" class="form-control" placeholder="Số điện thoại" />
+                    </div>
+                    <span class="text-danger small" asp-validation-for="Phone"></span>
+                </div>
+
+                <div class="text-muted xsmall mb-3">
+                    Chúng tôi có thể gửi mã xác thực 2 yếu tố tới số này khi bạn đăng nhập.
+                </div>
+
+                <button type="submit" class="btn btn-bk-primary w-100">Tiếp theo</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

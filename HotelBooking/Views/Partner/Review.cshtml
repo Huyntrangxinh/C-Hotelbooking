@@ -1,0 +1,163 @@
+@model HotelBooking.ViewModels.ReviewViewModel
+@{
+    ViewData["Title"] = "Tóm tắt hợp đồng";
+}
+
+<link rel="stylesheet" href="~/css/site.css" />
+
+<section class="review-wrap py-3">
+    <div class="container-xxl" style="max-width:1120px">
+        <!-- Back -->
+        <div class="mb-3">
+            <a asp-action="Contract" asp-route-propertyId="@Model.PropertyId" class="bk-link-back">
+                <i class="bi bi-arrow-left me-2"></i>Quay lại Đăng ký
+            </a>
+        </div>
+
+        <h4 class="page-title mb-3">Tóm tắt hợp đồng</h4>
+
+        <!-- Card: Property info -->
+        <div class="summary-card mb-3">
+            <div class="summary-head">
+                <div class="title">Thông tin về cơ sở lưu trú</div>
+                <a asp-action="Onboarding" asp-route-propertyId="@Model.PropertyId" class="edit-link">
+                    <i class="bi bi-pencil-square me-1"></i>Chỉnh sửa
+                </a>
+            </div>
+            <div class="summary-body">
+                <div class="info-row">
+                    <div class="info-label">Tên cơ sở lưu trú</div>
+                    <div class="info-value">@Model.PropertyName</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Địa chỉ cơ sở lưu trú</div>
+                    <div class="info-value">@Model.PropertyAddress</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card: Legal & Signer -->
+        <div class="summary-card mb-4">
+            <div class="summary-head">
+                <div class="title">Thông tin pháp lý và người ký</div>
+                <a asp-action="Contract" asp-route-propertyId="@Model.PropertyId" class="edit-link">
+                    <i class="bi bi-pencil-square me-1"></i>Chỉnh sửa
+                </a>
+            </div>
+            <div class="summary-body">
+                <div class="info-row">
+                    <div class="info-label">Tên pháp nhân hoặc tên cá nhân</div>
+                    <div class="info-value">@Model.LegalEntityName</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Địa chỉ của pháp nhân hoặc cá nhân</div>
+                    <div class="info-value">@Model.LegalEntityAddress</div>
+                </div>
+
+                <hr class="my-3" />
+
+                <div class="info-row">
+                    <div class="info-label">Người ký được ủy quyền</div>
+                    <div class="info-value">
+                        @Model.SignatoryName
+                        @if (!string.IsNullOrWhiteSpace(Model.SignatoryPosition))
+                        {
+                            <span class="text-muted">(@Model.SignatoryPosition)</span>
+                        }
+                    </div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Địa chỉ email</div>
+                    <div class="info-value">@Model.SignatoryEmail</div>
+                </div>
+                @* Nếu bạn có số điện thoại trong ViewModel, có thể hiển thị thêm
+                <div class="info-row">
+                    <div class="info-label">Số điện thoại</div>
+                    <div class="info-value">@Model.SignatoryPhone</div>
+                </div>
+                *@
+            </div>
+        </div>
+
+        <!-- Card: Contract preview -->
+        <div class="summary-card mb-5">
+            <div class="summary-head">
+                <div class="title">Contract Agreement Preview</div>
+            </div>
+            <div class="summary-body">
+                <div class="pdf-wrap">
+                    <iframe
+                        src="@Url.Action("GenerateContractPdf", "Partner", new { propertyId = Model.PropertyId })"
+                        class="pdf-frame"></iframe>
+                </div>
+
+                <div class="mt-3 d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <div class="small text-muted">
+                        Vui lòng đọc kỹ trước khi gửi. Bạn có thể tải bản xem trước để lưu trữ nội bộ.
+                    </div>
+                    <a class="btn btn-light border btn-sm"
+                       href="@Url.Action("GenerateContractPdf", "Partner", new { propertyId = Model.PropertyId })"
+                       target="_blank" rel="noopener">
+                        <i class="bi bi-download me-1"></i>Tải bản xem trước
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sticky footer -->
+    <div class="onb-sticky">
+        <div class="container-xxl d-flex justify-content-between align-items-center" style="max-width:1120px">
+            <a asp-action="Contract" asp-route-propertyId="@Model.PropertyId" class="btn btn-outline-secondary">
+                Quay lại trang trước
+            </a>
+            <form asp-action="Finalize" method="post" class="m-0">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="propertyId" value="@Model.PropertyId" />
+                <button type="submit" class="btn btn-bk-primary px-4">Gửi</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<style>
+/* ===== Look & feel giống TERA ===== */
+.review-wrap{background:#f7f9fc}
+.page-title{font-weight:800;color:#0b1f3f}
+
+.summary-card{
+  border:1px solid #e7edf8; border-radius:14px; background:#fff;
+  box-shadow:0 1px 0 rgba(16,24,40,.04)
+}
+.summary-head{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:.9rem 1rem; border-bottom:1px solid #eef2fb; background:#f8fbff; border-top-left-radius:14px;border-top-right-radius:14px
+}
+.summary-head .title{font-weight:700}
+.edit-link{font-weight:600; text-decoration:none}
+.edit-link:hover{opacity:.9}
+
+.summary-body{padding:1rem}
+.info-row{display:grid; grid-template-columns:260px 1fr; gap:1rem; padding:.5rem 0}
+.info-label{color:#6b7280; font-size:.95rem}
+.info-value{color:#111827; font-weight:600}
+
+.pdf-wrap{border:1px solid #e5e7eb; border-radius:10px; overflow:hidden; background:#fff}
+.pdf-frame{width:100%; height:640px; border:0}
+
+/* Sticky footer reuse */
+.onb-sticky{
+  position:sticky; bottom:0; left:0; right:0; background:#fff;
+  border-top:1px solid #e9ecef; padding:.8rem 0; z-index:60;
+  box-shadow:0 -2px 8px rgba(16,24,40,.05)
+}
+
+/* Nút primary kiểu Booking */
+:root{ --bk-blue:#006CE4; --bk-blue-hover:#0057c2; }
+.btn-bk-primary{background:var(--bk-blue); color:#fff; font-weight:700; border:none; border-radius:.8rem}
+.btn-bk-primary:hover{background:var(--bk-blue-hover); color:#fff}
+
+/* Link back */
+.bk-link-back{display:inline-flex; align-items:center; gap:.25rem; text-decoration:none; color:#0b1f3f; font-weight:600}
+.bk-link-back:hover{opacity:.9}
+</style>

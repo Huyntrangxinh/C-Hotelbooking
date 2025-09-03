@@ -1,0 +1,55 @@
+@model IEnumerable<Property>
+@{
+    ViewData["Title"] = "Duyệt đăng ký cơ sở lưu trú";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    @if (TempData["success"] != null)
+    {
+        <div class="alert alert-success">@TempData["success"]</div>
+    }
+
+    <h1 class="mb-4">Các cơ sở đang chờ duyệt</h1>
+
+    @if (!Model.Any())
+    {
+        <p class="text-muted">Không có đăng ký mới nào đang chờ duyệt.</p>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Tên cơ sở</th>
+                        <th>Thành phố</th>
+                        <th>Người đăng ký (Email)</th>
+                        <th style="width: 280px;" class="text-center">Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var prop in Model)
+                    {
+                        <tr>
+                            <td><strong>@prop.Name</strong></td>
+                            <td>@prop.City</td>
+                            <td>@prop.User?.Email</td>
+                            <td class="text-center">
+                                <a asp-area="Admin" asp-controller="Dashboard" asp-action="Details" asp-route-id="@prop.Id"
+                                    class="btn btn-info btn-sm">Xem chi tiết</a>
+                                <form asp-area="Admin" asp-controller="Dashboard" asp-action="Approve" method="post"
+                                    class="d-inline ms-1">
+                                    <input type="hidden" name="propertyId" value="@prop.Id" />
+                                    <button type="submit" class="btn btn-success btn-sm">Duyệt</button>
+                                </form>
+                                <a asp-area="Admin" asp-controller="Dashboard" asp-action="RejectWithReason" asp-route-id="@prop.Id"
+                                    class="btn btn-danger btn-sm">Từ chối</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

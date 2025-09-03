@@ -1,0 +1,61 @@
+@model RejectPropertyViewModel
+@{
+    ViewData["Title"] = "Từ chối cơ sở: " + Model.PropertyName;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container my-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0">
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        Xác nhận từ chối cơ sở
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-warning">
+                        <h6 class="alert-heading">
+                            <i class="bi bi-info-circle me-2"></i>
+                            Bạn có chắc chắn muốn từ chối cơ sở này?
+                        </h6>
+                        <p class="mb-0">
+                            <strong>Cơ sở:</strong> @Model.PropertyName
+                        </p>
+                    </div>
+
+                    <form asp-action="RejectWithReason" method="post">
+                        <input type="hidden" asp-for="PropertyId" />
+                        <input type="hidden" asp-for="PropertyName" />
+                        
+                        <div class="mb-3">
+                            <label asp-for="RejectionReason" class="form-label fw-bold">
+                                Lý do từ chối <span class="text-danger">*</span>
+                            </label>
+                            <textarea asp-for="RejectionReason" class="form-control" rows="4"
+                                placeholder="Vui lòng nhập lý do từ chối chi tiết để đối tác có thể hiểu và khắc phục..."></textarea>
+                            <span asp-validation-for="RejectionReason" class="text-danger small"></span>
+                        </div>
+
+                        <div class="d-flex gap-2 justify-content-end">
+                            <a asp-action="Index" class="btn btn-secondary">
+                                <i class="bi bi-arrow-left me-2"></i>Hủy bỏ
+                            </a>
+                            <button type="submit" class="btn btn-danger">
+                                <i class="bi bi-x-circle me-2"></i>Xác nhận từ chối
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+

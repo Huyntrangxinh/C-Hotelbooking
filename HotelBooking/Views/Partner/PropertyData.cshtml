@@ -1,0 +1,2245 @@
+@model HotelBooking.ViewModels.PropertyDataViewModel
+@{
+    ViewData["Title"] = "Thông tin chi tiết cơ sở lưu trú";
+}
+
+<div class="container-xl ui-compact" style="max-width:1080px;">
+    <!-- Header -->
+    <div class="row mb-3">
+        <div class="col-12">
+            <div class="header-container">
+                <div class="header-left">
+                    <h5 class="mb-1 fw-semibold">@Model.PropertyName</h5>
+                    <small class="text-muted">Số đăng ký: @Model.RegistrationNumber</small>
+                </div>
+                <div class="header-right">
+                    <small class="text-muted">Bạn cần trợ giúp?</small>
+                    <select class="form-select form-select-sm">
+                        <option selected>VI</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Tabs (Traveloka-style) -->
+    <div class="row mb-3">
+        <div class="col-12">
+            <div class="nav nav-tabs tabs-tera" id="propertyTabs" role="tablist">
+                <button class="nav-link @(Model.CurrentTab == "property" ? "active" : "")" id="property-tab"
+                    data-bs-toggle="tab" data-bs-target="#property" type="button" role="tab">
+                    <i class="bi bi-building me-2"></i>Giới thiệu về cơ sở lưu trú
+                </button>
+                <button class="nav-link @(Model.CurrentTab == "rooms" ? "active" : "")" id="rooms-tab"
+                    data-bs-toggle="tab" data-bs-target="#rooms" type="button" role="tab">
+                    <i class="bi bi-bed me-2"></i>Cấu hình phòng
+                </button>
+                <button class="nav-link @(Model.CurrentTab == "pricing" ? "active" : "")" id="pricing-tab"
+                    data-bs-toggle="tab" data-bs-target="#pricing" type="button" role="tab">
+                    <i class="bi bi-tag me-2"></i>Cấu hình giá
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-content" id="propertyTabContent">
+        <!-- Property Information Tab -->
+        <div class="tab-pane fade @(Model.CurrentTab == "property" ? "show active" : "")" id="property" role="tabpanel">
+            <form asp-action="PropertyData" method="post" enctype="multipart/form-data">
+                <input type="hidden" asp-for="PropertyId" />
+                <input type="hidden" asp-for="CurrentTab" value="property" />
+
+                <!-- Check-in/Check-out -->
+                <div class="card card-slim mb-3">
+                    <div class="card-header py-2">
+                        <h6 class="mb-0">Thông tin làm thủ tục nhận phòng</h6>
+                        <small class="text-muted">Thiết lập thời gian làm thủ tục nhận phòng và trả phòng cho chỗ ở của
+                            bạn</small>
+                    </div>
+                    <div class="card-body py-3">
+                        <div class="row g-3 align-items-end">
+                            <div class="col-md-6">
+                                <label class="form-label mb-1">Lễ tân của bạn có mở cửa 24 giờ không?</label>
+                                <div class="d-flex gap-3">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" asp-for="IsReception24Hours"
+                                            value="true" id="reception24h-yes">
+                                        <label class="form-check-label" for="reception24h-yes">Có</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" asp-for="IsReception24Hours"
+                                            value="false" id="reception24h-no">
+                                        <label class="form-check-label" for="reception24h-no">Không</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label asp-for="CheckInTime" class="form-label mb-1">Giờ nhận phòng</label>
+                                <input asp-for="CheckInTime" type="time" class="form-control form-control-sm" />
+                            </div>
+                            <div class="col-md-3">
+                                <label asp-for="CheckOutTime" class="form-label mb-1">Giờ trả phòng</label>
+                                <input asp-for="CheckOutTime" type="time" class="form-control form-control-sm" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Photos -->
+                <div class="card card-slim mb-3">
+                    <div class="card-header py-2">
+                        <h6 class="mb-0"><i class="bi bi-camera me-2"></i>Ảnh cơ sở lưu trú</h6>
+                        <small class="text-muted">Cung cấp những bức ảnh đẹp nhất để quảng bá cơ sở lưu trú của bạn và
+                            thu hút khách hàng tiềm năng. <a href="#" class="text-primary">Xem Hướng dẫn về ảnh chụp chỗ
+                                ở</a>.</small>
+                    </div>
+
+                    <div class="card-body py-3">
+                        <div class="row g-3">
+                            <!-- yêu cầu ảnh -->
+                            <div class="col-md-5">
+                                <div class="photo-requirements">
+                                    <h6 class="mb-2">Yêu cầu ảnh:</h6>
+                                    <ul class="list-unstyled mb-0">
+                                        <li><i class="bi bi-check-circle text-success me-2"></i>Độ phân giải: Tối thiểu
+                                            800×600 px</li>
+                                        <li><i class="bi bi-check-circle text-success me-2"></i>Kích cỡ: Tối đa 300
+                                            KB</li>
+                                        <li><i class="bi bi-check-circle text-success me-2"></i>Chỉ chấp nhận ảnh: Ngoại
+                                            thất / Tòa nhà</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- upload + gallery -->
+                            <div class="col-md-7">
+                                <!-- Ảnh chính -->
+                                <div class="photo-tile large mb-3" id="mainPhotoTile">
+                                    <div class="upload-placeholder text-center" id="mainPhotoPlaceholder">
+                                        <i class="bi bi-camera mb-2" style="font-size:28px;"></i>
+                                        <div class="title">Ngoại thất / Tòa nhà</div>
+                                        <a href="#" class="upload-link" data-upload-trigger> Tải lên ảnh</a>
+                                    </div>
+
+                                    <img id="mainPhotoImg" alt="Main preview" class="d-none">
+                                    <div class="tile-overlay d-none">
+                                        <a href="#" class="preview-link">Xem trước</a>
+                                        <span class="divider"></span>
+                                        <a href="#" class="delete-link text-danger">Xóa</a>
+                                    </div>
+                                </div>
+
+                                <!-- Dropdown của ảnh chính (khóa cứng Exterior) -->
+                                <div class="mb-3">
+                                    <select class="form-select form-select-sm" id="mainPhotoCategory" disabled>
+                                        <option value="exterior" selected>Ngoại thất / Tòa nhà</option>
+                                    </select>
+                                </div>
+
+                                <!-- Lưới ảnh bổ sung + Button upload -->
+                                <div class="gallery-grid mb-3" id="galleryGrid"></div>
+
+                                <!-- 1 input file dùng chung cho TẤT CẢ nút upload – để ngoài mọi tile -->
+                                <input type="file" id="photoUpload" name="PropertyPhotos" class="d-none" multiple
+                                    accept="image/*">
+
+                                <!-- inputs ẩn gửi về server -->
+                                <input type="hidden" id="photoCategories" name="PhotoCategoriesJson" />
+                                <input type="hidden" id="photoManifest" name="PhotoManifestJson" />
+                                <input type="hidden" id="deletedPhotoUrls" name="DeletedPhotoUrlsJson" />
+                                <!-- URLs ảnh đã lưu để JS đọc và khôi phục gallery -->
+                                <input type="hidden" id="existingPhotoUrlsJson"
+                                    value='@System.Text.Json.JsonSerializer.Serialize(Model.SavedPhotoUrls ?? new List<string>())' />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal xem trước: GIỮ như bạn đang có (id=photoPreviewModal) -->
+
+
+                <!-- Photo Preview Modal -->
+                <div class="modal fade" id="photoPreviewModal" tabindex="-1" aria-labelledby="photoPreviewModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-fullscreen">
+                        <div class="modal-content">
+                            <div class="modal-body d-flex flex-column align-items-center justify-content-center">
+
+                                <img id="modalImagePreview" src="" alt="Preview" />
+
+                                <small class="mt-2" id="imageDimensions"></small>
+
+                                <button type="button" class="btn-close-preview mt-3" data-bs-dismiss="modal">Close
+                                    Preview</button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Amenities -->
+                <div class="card card-slim mb-3">
+                    <div class="card-header py-2">
+                        <h6 class="mb-0">Tiện nghi</h6>
+                        <small class="text-muted">Vui lòng chọn ít nhất 3 tiện nghi</small>
+                    </div>
+
+
+
+                    <div class="card-body py-3">
+                        <!-- vỏ bọc + khung cuộn -->
+                        <div class="amenities-wrap">
+                            <div class="amenities-container">
+                                <!-- Khu vực chung -->
+                                <h6 class="amenity-category-title"><i class="bi bi-building me-2"></i>Khu vực chung</h6>
+                                <div class="amenities-grid">
+                                    <div>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" asp-for="HasSmokingArea"
+                                                id="smoking">
+                                            <label class="form-check-label" for="smoking">Khu vực hút thuốc</label>
+                                        </div>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox"
+                                                asp-for="HasAccessibleBathroom" id="accessible-bathroom">
+                                            <label class="form-check-label" for="accessible-bathroom">Phòng tắm cho
+                                                người khuyết tật</label>
+                                        </div>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" asp-for="HasElevator"
+                                                id="elevator">
+                                            <label class="form-check-label" for="elevator">Thang máy</label>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" asp-for="HasPublicWifi"
+                                                id="wifi">
+                                            <label class="form-check-label" for="wifi">Khu vực Wifi công cộng</label>
+                                        </div>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox"
+                                                asp-for="HasAccessibleParking" id="accessible-parking">
+                                            <label class="form-check-label" for="accessible-parking">Bãi đậu xe cho
+                                                người khuyết tật</label>
+                                        </div>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" asp-for="HasParkingArea"
+                                                id="parking">
+                                            <label class="form-check-label" for="parking">Khu vực đậu xe</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Ẩm thực -->
+                                <h6 class="amenity-category-title mt-3"><i class="bi bi-cup-straw me-2"></i>Ẩm thực</h6>
+                                <div class="amenities-grid">
+                                    <div>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" asp-for="HasCafe" id="cafe">
+                                            <label class="form-check-label" for="cafe">Quán cà phê</label>
+                                        </div>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" asp-for="HasRestaurant"
+                                                id="restaurant">
+                                            <label class="form-check-label" for="restaurant">Nhà hàng</label>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" asp-for="HasBar" id="bar">
+                                            <label class="form-check-label" for="bar">Quán bar</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Dịch vụ -->
+                                <h6 class="amenity-category-title mt-3"><i class="bi bi-gear me-2"></i>Dịch vụ</h6>
+                                <div class="amenities-grid">
+                                    <div>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" asp-for="HasFrontDesk"
+                                                id="front-desk">
+                                            <label class="form-check-label" for="front-desk">Quầy lễ tân</label>
+                                        </div>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" asp-for="HasExpressCheckIn"
+                                                id="express-checkin">
+                                            <label class="form-check-label" for="express-checkin">Nhận phòng
+                                                nhanh</label>
+                                        </div>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" asp-for="HasConcierge"
+                                                id="concierge">
+                                            <label class="form-check-label" for="concierge">Dịch vụ trợ giúp đặc
+                                                biệt</label>
+                                        </div>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" asp-for="HasExpressCheckOut"
+                                                id="express-checkout">
+                                            <label class="form-check-label" for="express-checkout">Trả phòng
+                                                nhanh</label>
+                                        </div>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" id="room-service"
+                                                name="HasRoomService">
+                                            <label class="form-check-label" for="room-service">Dịch vụ phòng</label>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" asp-for="HasLaundryService"
+                                                id="laundry">
+                                            <label class="form-check-label" for="laundry">Dịch vụ giặt ủi</label>
+                                        </div>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" asp-for="Has24HourSecurity"
+                                                id="security">
+                                            <label class="form-check-label" for="security">Bảo vệ 24 giờ</label>
+                                        </div>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" asp-for="HasLuggageStorage"
+                                                id="luggage">
+                                            <label class="form-check-label" for="luggage">Nơi giữ hành lý</label>
+                                        </div>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" asp-for="HasAirportTransfer"
+                                                id="airport">
+                                            <label class="form-check-label" for="airport">Đưa đón sân bay</label>
+                                        </div>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" id="free-wifi"
+                                                name="HasFreeWifi">
+                                            <label class="form-check-label" for="free-wifi">Wifi miễn phí</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Tiện nghi lân cận -->
+                                <h6 class="amenity-category-title mt-3"><i class="bi bi-geo-alt me-2"></i>Tiện nghi lân
+                                    cận</h6>
+                                <div class="amenities-grid">
+                                    <div>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" id="shops" name="HasShops">
+                                            <label class="form-check-label" for="shops">Cửa hàng</label>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" id="atm-banking"
+                                                name="HasAtmBanking">
+                                            <label class="form-check-label" for="atm-banking">ATM hoặc Ngân hàng</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Tiện nghi trong nhà -->
+                                <h6 class="amenity-category-title mt-3"><i class="bi bi-house me-2"></i>Tiện nghi trong
+                                    nhà</h6>
+                                <div class="amenities-grid">
+                                    <div>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" id="swimming-pool"
+                                                name="HasSwimmingPool">
+                                            <label class="form-check-label" for="swimming-pool">Hồ bơi</label>
+                                        </div>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" id="children-pool"
+                                                name="HasChildrenPool">
+                                            <label class="form-check-label" for="children-pool">Hồ bơi trẻ em</label>
+                                        </div>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" id="business-center"
+                                                name="HasBusinessCenter">
+                                            <label class="form-check-label" for="business-center">Trung tâm thương
+                                                mại</label>
+                                        </div>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" id="sauna" name="HasSauna">
+                                            <label class="form-check-label" for="sauna">Phòng xông hơi</label>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" id="children-play-area"
+                                                name="HasChildrenPlayArea">
+                                            <label class="form-check-label" for="children-play-area">Khu vui chơi trẻ
+                                                em</label>
+                                        </div>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" id="spa" name="HasSpa">
+                                            <label class="form-check-label" for="spa">Spa</label>
+                                        </div>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" id="fitness-center"
+                                                name="HasFitnessCenter">
+                                            <label class="form-check-label" for="fitness-center">Trung tâm thể
+                                                dục</label>
+                                        </div>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" id="meeting-facilities"
+                                                name="HasMeetingFacilities">
+                                            <label class="form-check-label" for="meeting-facilities">Phòng họp</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="amenity-note mt-3">
+                                <div class="amenity-note-content">
+                                    <i class="bi bi-info-circle me-2"></i>
+                                    <small class="text-muted">Không phải tiện nghi nào cũng được liệt kê ở đây. Bạn có
+                                        thể
+                                        thêm nhiều tiện nghi khác sau trong TERA.</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Star Rating -->
+                <div class="card card-slim mb-5">
+                    <div class="card-header py-2">
+                        <h6 class="mb-0">Đánh giá sao</h6>
+                        <small class="text-muted">Hãy chọn đánh giá sao cho chỗ ở của bạn</small>
+                    </div>
+                    <div class="card-body py-3">
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" asp-for="StarRating" value="" id="no-rating">
+                            <label class="form-check-label" for="no-rating">Chưa có đánh giá sao</label>
+                        </div>
+                        <div class="row g-2">
+                            @for (int i = 1; i <= 5; i++)
+                            {
+                                <div class="col-6 col-md-2">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" asp-for="StarRating" value="@i"
+                                            id="rating-@i">
+                                        <label class="form-check-label" for="rating-@i">
+                                            @for (int j = 1; j <= i; j++)
+                                            {
+                                                <i class="bi bi-star-fill text-warning small"></i>
+                                            }
+                                            @for (int j = i + 1; j <= 5; j++)
+                                            {
+                                                <i class="bi bi-star text-muted small"></i>
+                                            }
+                                            <small>(@i sao)</small>
+                                        </label>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sticky Action Bar -->
+                <div class="action-bar d-flex justify-content-between align-items-center">
+                    <a href="@Url.Action("MyProperties", "Partner")" class="btn btn-outline-secondary btn-sm">← Quay lại
+                        TERA</a>
+                    <button type="submit" class="btn btn-warning btn-sm px-3"
+                        style="background-color: #FF5E20; border-color: #FF5E20;">✔ Lưu và tiếp tục</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Rooms Configuration -->
+        <div class="tab-pane fade @(Model.CurrentTab == "rooms" ? "show active" : "")" id="rooms" role="tabpanel">
+            @if (Model.Rooms != null && Model.Rooms.Any())
+            {
+                <div class="card card-slim">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="mb-0">Danh sách phòng</h6>
+                            <a class="btn btn-primary btn-sm"
+                                href="@Url.Action("RoomData", "Partner", new { propertyId = Model.PropertyId })">
+                                <i class="bi bi-plus-lg me-1"></i> Tạo phòng mới
+                            </a>
+                        </div>
+                        <div class="row g-3">
+                            @foreach (var r in Model.Rooms)
+                            {
+                                <div class="col-12 col-md-6 col-lg-4">
+                                    <div class="card h-100 shadow-sm">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-start justify-content-between">
+                                                <div>
+                                                    <h6 class="fw-semibold mb-1">@r.Name</h6>
+                                                    <small class="text-muted">Sức chứa: @r.MaxGuests người</small><br />
+                                                    <small class="text-muted">Số lượng: @r.Quantity phòng</small>
+                                                </div>
+                                                <i class="bi bi-door-open fs-4 text-muted"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="rooms-empty card card-slim">
+                    <div class="card-body py-5 text-center">
+                        <div class="empty-illustration mb-3">
+                            <i class="bi bi-lamp"></i>
+                            <i class="bi bi-sofa ms-2"></i>
+                        </div>
+                        <h6 class="mb-1">Chưa có phòng</h6>
+                        <small class="text-muted d-block mb-3">Hãy nhấp vào nút bên dưới để tạo phòng</small>
+                        <a class="btn btn-primary btn-sm"
+                            href="@Url.Action("RoomData", "Partner", new { propertyId = Model.PropertyId })">
+                            <i class="bi bi-plus-lg me-1"></i> Tạo phòng mới
+                        </a>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- Pricing Configuration -->
+        <div class="tab-pane fade @(Model.CurrentTab == "pricing" ? "show active" : "")" id="pricing" role="tabpanel">
+            <div class="card card-slim">
+                <div class="card-body text-center py-5">
+                    <i class="bi bi-tag display-6 text-muted mb-2"></i>
+                    <h6 class="text-muted mb-1">Cấu hình giá</h6>
+                    <small class="text-muted">Tính năng này sẽ được phát triển trong phiên bản tiếp theo.</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Room Modal -->
+    <div class="modal fade" id="createRoomModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title fw-semibold"><i class="bi bi-plus-lg me-2"></i>Tạo phòng mới</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <form asp-action="CreateRoom" method="post">
+                    <input type="hidden" name="PropertyId" value="@Model.PropertyId" />
+                    <input type="hidden" name="ReturnTab" value="rooms" />
+
+                    <div class="modal-body">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label mb-1">Tên loại phòng</label>
+                                <input class="form-control form-control-sm" name="Name" required />
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label mb-1">Số lượng phòng</label>
+                                <input type="number" min="1" class="form-control form-control-sm" name="Quantity"
+                                    required />
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label mb-1">Sức chứa tối đa</label>
+                                <input type="number" min="1" class="form-control form-control-sm" name="MaxGuests"
+                                    required />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label mb-1">Loại giường</label>
+                                <select class="form-select form-select-sm" name="BedType">
+                                    <option value="double">Giường đôi</option>
+                                    <option value="twin">Hai giường đơn</option>
+                                    <option value="queen">Queen</option>
+                                    <option value="king">King</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label mb-1">Diện tích (m²)</label>
+                                <input type="number" min="1" class="form-control form-control-sm" name="Size" />
+                            </div>
+                            <div class="col-md-4 d-flex align-items-end">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="SmokingAllowed"
+                                        id="roomSmoking" />
+                                    <label class="form-check-label" for="roomSmoking">Cho phép hút thuốc</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary btn-sm"
+                            data-bs-dismiss="modal">Hủy</button>
+                        <button type="submit" class="btn btn-primary btn-sm">Tạo phòng</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    @section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                // Elements
+                const fileInput = document.getElementById('photoUpload');
+                const mainTile = document.getElementById('mainPhotoTile');
+                const grid = document.getElementById('galleryGrid');
+                const mainImg = document.getElementById('mainPhotoImg');
+                const catHidden = document.getElementById('photoCategories');
+
+                // Modal
+                const modalEl = document.getElementById('photoPreviewModal');
+                const modalImg = document.getElementById('modalImagePreview');
+                const modalThumbs = document.getElementById('modalThumbnailsContainer');
+                const dimsLabel = document.getElementById('imageDimensions');
+
+                // State
+                let photos = []; // [{id?, url?, file?, preview, category}]
+                let currentPreviewIndex = 0;
+                let deletedUrls = [];
+
+                // ========== Helpers ==========
+                const VN_CAT = {
+                    exterior: 'Ngoại thất / Tòa nhà',
+                    others: 'Others', lobby: 'Lobby', swimming_pool: 'Swimming Pool',
+                    entertainment: 'Entertainment Facility', sport: 'Sport Facility',
+                    hygiene: 'Hygiene Facility', bedroom: 'Bedroom', bathroom: 'Bathroom',
+                    functional_hall: 'Functional Hall'
+                };
+                const catOptionsHtml = Object.entries(VN_CAT)
+                    .filter(([k]) => k !== 'exterior')
+                    .map(([val, label]) => `<option value="${val}">${label}</option>`).join('');
+
+                // Function to set main tile UI state
+                function setMainEmptyUI(isEmpty) {
+                    const overlay = mainTile.querySelector('.tile-overlay');
+                    const placeholder = mainTile.querySelector('.upload-placeholder');
+                    const moreZone = grid.querySelector('.upload-drop-zone');
+
+                    if (isEmpty) {
+                        mainTile.classList.add('empty');
+                        mainTile.classList.remove('has-photo');
+                        mainImg.classList.add('d-none');
+                        overlay.classList.add('d-none');
+                        placeholder.classList.remove('d-none');
+                        if (moreZone) moreZone.classList.add('d-none');
+                    } else {
+                        mainTile.classList.remove('empty');
+                        mainTile.classList.add('has-photo');
+                        mainImg.classList.remove('d-none');
+                        overlay.classList.remove('d-none');
+                        placeholder.classList.add('d-none');
+                        if (moreZone) moreZone.classList.remove('d-none');
+                    }
+                }
+
+                // Image validation function
+                function validateImage(file) {
+                    return new Promise((resolve, reject) => {
+                        // Check file size (maximum 300KB)
+                        const maxSizeKB = 300;
+                        const fileSizeKB = file.size / 1024;
+
+                        if (fileSizeKB > maxSizeKB) {
+                            reject(`Kích cỡ ảnh phải tối đa ${maxSizeKB} KB. Ảnh hiện tại: ${fileSizeKB.toFixed(1)} KB`);
+                            return;
+                        }
+
+                        // Check if it's an image
+                        if (!file.type.startsWith('image/')) {
+                            reject('File phải là ảnh');
+                            return;
+                        }
+
+                        // Check resolution
+                        const img = new Image();
+                        img.onload = function () {
+                            const width = this.naturalWidth;
+                            const height = this.naturalHeight;
+
+                            if (width < 800 || height < 600) {
+                                reject(`Độ phân giải ảnh phải tối thiểu 800×600 px. Ảnh hiện tại: ${width}×${height} px`);
+                                return;
+                            }
+
+                            resolve(true);
+                        };
+
+                        img.onerror = function () {
+                            reject('Không thể đọc ảnh');
+                        };
+
+                        img.src = URL.createObjectURL(file);
+                    });
+                }
+
+                function showError(message) {
+                    // Remove any existing error alerts first
+                    const existingAlerts = document.querySelectorAll('.alert-danger');
+                    existingAlerts.forEach(alert => alert.remove());
+
+                    // Create error alert
+                    const alertDiv = document.createElement('div');
+                    alertDiv.className = 'alert alert-danger alert-dismissible fade show';
+                    alertDiv.innerHTML = `
+                                                                                                                                                                                                       <i class="bi bi-exclamation-triangle me-2"></i>
+                                                                                                                                                                                                       <strong>Ảnh không hợp lệ:</strong> ${message}
+                                                                                                                                                                                                       <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                                                                                                                                                                                   `;
+
+                    // Insert right after the photo section card
+                    const photoCards = document.querySelectorAll('.card');
+                    let photoCard = null;
+
+                    // Find the photo card by looking for the camera icon
+                    photoCards.forEach(card => {
+                        if (card.querySelector('.bi-camera')) {
+                            photoCard = card;
+                        }
+                    });
+
+                    if (photoCard && photoCard.nextElementSibling) {
+                        photoCard.parentNode.insertBefore(alertDiv, photoCard.nextElementSibling);
+                    } else if (photoCard) {
+                        // Insert after the photo card
+                        photoCard.insertAdjacentElement('afterend', alertDiv);
+                    } else {
+                        // Fallback: insert at the beginning of the main content
+                        const mainContent = document.querySelector('.container-fluid .row .col-lg-8');
+                        if (mainContent) {
+                            mainContent.insertBefore(alertDiv, mainContent.firstElementChild);
+                        }
+                    }
+
+                    // Auto remove after 5 seconds
+                    setTimeout(() => {
+                        if (alertDiv.parentNode) {
+                            alertDiv.remove();
+                        }
+                    }, 5000);
+                }
+
+                function rebuildHiddenInputs() {
+                    // update JSON categories
+                    catHidden.value = JSON.stringify(photos.map(p => p.category));
+                    // recreate hidden file inputs for model binder
+                    const form = document.querySelector('form');
+                    [...form.querySelectorAll('input[name^="PropertyPhotos"]')].forEach(i => i.remove());
+                    let manifest = [];
+                    let newIndex = 0;
+                    photos.forEach((p, order) => {
+                        if (p.file) {
+                            const inp = document.createElement('input');
+                            inp.type = 'file';
+                            inp.name = `PropertyPhotos[${newIndex}]`;
+                            inp.style.display = 'none';
+                            const dt = new DataTransfer();
+                            dt.items.add(p.file);
+                            inp.files = dt.files;
+                            form.appendChild(inp);
+                            manifest.push({ newIndex: newIndex, category: p.category, order: order });
+                            newIndex++;
+                        } else if (p.preview) {
+                            manifest.push({ url: p.preview, category: p.category, order: order });
+                        }
+                    });
+                    document.getElementById('photoManifest').value = JSON.stringify(manifest);
+                    document.getElementById('deletedPhotoUrls').value = JSON.stringify(deletedUrls);
+                }
+
+                function renderGrid() {
+                    // Clear existing thumbnails and upload buttons
+                    [...grid.querySelectorAll('.tile-wrap, .upload-drop-zone')].forEach(n => n.remove());
+
+                    const additionalPhotos = photos.slice(1); // Skip first photo (main)
+                    const totalItems = additionalPhotos.length;
+
+                    // Logic hiển thị button upload - CHỈ DÙNG BUTTON NHỎ
+
+                    // Render ảnh
+                    additionalPhotos.forEach((p, idx0) => {
+                        const wrap = document.createElement('div');
+                        wrap.className = 'tile-wrap';
+                        const globalIdx = idx0 + 1; // actual index in photos array
+                        wrap.innerHTML = `
+                                                                                    <div class="photo-tile">
+                                                                                        <img src="${p.preview}" alt="photo ${globalIdx}">
+                                                                                        <div class="tile-overlay">
+                                                                                            <a href="#" class="js-preview" data-idx="${globalIdx}">Xem trước</a>
+                                                                                            <span class="divider"></span>
+                                                                                            <a href="#" class="js-remove text-danger" data-idx="${globalIdx}">Xóa</a>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <select class="form-select form-select-sm photo-cat" data-idx="${globalIdx}">
+                                                                                        ${catOptionsHtml}
+                                                                                    </select>
+                                                                                `;
+                        grid.appendChild(wrap);
+                        wrap.querySelector('.photo-cat').value = p.category;
+                    });
+
+                    // LUÔN thêm button nhỏ vào grid
+                    const uploadWrap = document.createElement('div');
+                    uploadWrap.className = 'tile-wrap';
+                    uploadWrap.innerHTML = `
+                                                                                <div class="upload-drop-zone grid-item" data-upload-trigger>
+                                                                                    <i class="bi bi-camera mb-2"></i>
+                                                                                    <div class="text">Tải lên thêm ảnh</div>
+                                                                                </div>
+                                                                            `;
+                    grid.appendChild(uploadWrap);
+
+                    // Main photo = first upload
+                    if (photos.length) {
+                        mainImg.src = photos[0].preview;
+                        setMainEmptyUI(false);
+                    } else {
+                        mainImg.src = '';
+                        setMainEmptyUI(true);
+                    }
+
+                    rebuildHiddenInputs();
+                }
+
+                function addFiles(fileList) {
+                    [...fileList].forEach(file => {
+                        if (!file.type.startsWith('image/')) {
+                            showError('File phải là ảnh');
+                            return;
+                        }
+
+                        // Validate image before adding
+                        validateImage(file)
+                            .then(() => {
+                                const reader = new FileReader();
+                                reader.onload = e => {
+                                    // First photo gets 'exterior' category, others get 'others'
+                                    const category = photos.length === 0 ? 'exterior' : 'others';
+                                    photos.push({ file, preview: e.target.result, category });
+                                    renderGrid();
+                                };
+                                reader.readAsDataURL(file);
+                            })
+                            .catch(error => {
+                                showError(error);
+                            });
+                    });
+                }
+
+                // ========== Events ==========
+                // Upload triggers
+                mainTile.querySelector('.upload-link').addEventListener('click', e => {
+                    e.preventDefault();
+                    fileInput.click();
+                });
+
+                mainTile.querySelector('.delete-link').addEventListener('click', e => {
+                    e.preventDefault();
+                    if (photos.length > 0) {
+                        // Xóa ảnh đầu tiên (ảnh chính)
+                        photos.splice(0, 1);
+                        // Đẩy ảnh tiếp theo lên làm ảnh chính nếu có
+                        if (photos.length > 0) {
+                            // Ảnh đầu tiên mới sẽ có category 'exterior'
+                            photos[0].category = 'exterior';
+                        }
+                        renderGrid();
+                        rebuildHiddenInputs();
+                    }
+                });
+
+
+
+                // select files
+                fileInput.addEventListener('change', e => addFiles(e.target.files));
+
+                // drag & drop for grid (button nhỏ)
+                grid.addEventListener('dragover', e => {
+                    e.preventDefault();
+                    const uploadZone = e.target.closest('.upload-drop-zone');
+                    if (uploadZone) uploadZone.classList.add('dragover');
+                });
+
+                grid.addEventListener('dragenter', e => {
+                    e.preventDefault();
+                    const uploadZone = e.target.closest('.upload-drop-zone');
+                    if (uploadZone) uploadZone.classList.add('dragover');
+                });
+
+                grid.addEventListener('dragleave', e => {
+                    e.preventDefault();
+                    const uploadZone = e.target.closest('.upload-drop-zone');
+                    if (uploadZone) uploadZone.classList.remove('dragover');
+                });
+
+                grid.addEventListener('drop', e => {
+                    e.preventDefault();
+                    const uploadZone = e.target.closest('.upload-drop-zone');
+                    if (uploadZone) {
+                        uploadZone.classList.remove('dragover');
+                        addFiles(e.dataTransfer.files);
+                    }
+                });
+
+                // delegate actions on grid
+                grid.addEventListener('click', e => {
+                    const pv = e.target.closest('.js-preview');
+                    const rm = e.target.closest('.js-remove');
+                    const uploadBtn = e.target.closest('[data-upload-trigger]');
+
+                    if (pv) {
+                        e.preventDefault();
+                        currentPreviewIndex = +pv.dataset.idx || 0;
+                        openPreview(currentPreviewIndex);
+                    }
+                    if (rm) {
+                        e.preventDefault();
+                        const i = +rm.dataset.idx;
+                        const removed = photos[i];
+                        if (removed && removed.preview && !removed.file) {
+                            deletedUrls.push(removed.preview);
+                        }
+                        photos.splice(i, 1);
+                        renderGrid();
+                    }
+                    if (uploadBtn) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        fileInput.click();
+                    }
+                });
+                grid.addEventListener('change', e => {
+                    const sel = e.target.closest('.photo-cat');
+                    if (sel) {
+                        const i = +sel.dataset.idx;
+                        photos[i].category = sel.value;
+                        rebuildHiddenInputs();
+                    }
+                });
+
+                // Main tile "Xem trước"
+                mainTile.querySelector('.preview-link').addEventListener('click', e => {
+                    e.preventDefault();
+                    if (!photos.length) return;
+                    openPreview(0);
+                });
+
+                // Modal preview
+                function openPreview(idx) {
+                    if (!photos[idx]) return;
+                    setModalImage(idx);
+                    new bootstrap.Modal(modalEl).show();
+                }
+
+                function setModalImage(idx) {
+                    modalImg.src = photos[idx].preview;
+                    const im = new Image();
+                    im.onload = () => dimsLabel.textContent = `${im.naturalWidth} × ${im.naturalHeight}`;
+                    im.src = photos[idx].preview;
+                }
+
+                // Load saved photos if available
+                function loadSavedPhotos() {
+                    const savedCategoriesJson = '@Html.Raw(Model.PhotoCategoriesJson ?? "")';
+                    const savedUrlsJson = document.getElementById('existingPhotoUrlsJson')?.value || '[]';
+                    try {
+                        const cats = savedCategoriesJson ? JSON.parse(savedCategoriesJson) : [];
+                        const urls = savedUrlsJson ? JSON.parse(savedUrlsJson) : [];
+                        if (urls.length > 0) {
+                            photos = urls.map((u, i) => ({ file: null, preview: u, category: cats[i] || (i === 0 ? 'exterior' : 'others') }));
+                            renderGrid();
+                        } else if (cats.length > 0) {
+                            photos = cats.map((c, i) => ({ file: null, preview: '', category: c }));
+                            renderGrid();
+                        }
+                    } catch (e) { console.error('Error loading saved photos', e); }
+                }
+
+                // init
+                setMainEmptyUI(true);
+                renderGrid();
+                loadSavedPhotos();
+            });
+        </script>
+    }
+
+
+</div>
+
+<style>
+    /* Empty state Rooms giống Traveloka */
+    .rooms-empty.card {
+        border: 2px dashed #eef1f5;
+        background: #fafcff;
+        min-height: 320px;
+    }
+
+    .rooms-empty .card-body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .empty-illustration {
+        font-size: 56px;
+        color: #6c757d;
+        line-height: 1;
+    }
+
+    /* ===== Compact Look like Traveloka/Booking ===== */
+    .ui-compact {
+        font-size: 14px
+    }
+
+    /* Header styling */
+    .header-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        width: 100%;
+        padding: 0.5rem 0;
+    }
+
+    .header-left {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .header-left h5 {
+        margin-bottom: 0.25rem !important;
+    }
+
+    .header-right {
+        flex-shrink: 0;
+        margin-left: 1.5rem;
+        white-space: nowrap;
+        padding-top: 0.25rem;
+    }
+
+    .header-right select {
+        min-width: 60px;
+    }
+
+    /* Navigation tabs spacing */
+    .nav-tabs {
+        padding: 0.5rem 0;
+        border-bottom: 2px solid #e9ecef;
+    }
+
+    .nav-tabs .nav-link {
+        padding: 0.75rem 1.5rem;
+        margin-right: 0.5rem;
+        border-radius: 8px 8px 0 0;
+        border: none;
+        background: transparent;
+        color: #6c757d;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+
+    .nav-tabs .nav-link:hover {
+        background: #f8f9fa;
+        color: #495057;
+    }
+
+    .nav-tabs .nav-link.active {
+        background: #0d6efd;
+        color: white;
+        border: none;
+    }
+
+    .ui-compact h5,
+    .ui-compact h6 {
+        font-weight: 600
+    }
+
+    .card-slim {
+        border: 1px solid #eef1f5;
+        border-radius: 10px;
+        box-shadow: none
+    }
+
+    .card-slim .card-header {
+        background: #fff;
+        border-bottom: 1px solid #eef1f5
+    }
+
+    .card-slim .card-body {
+        padding: 16px
+    }
+
+    /* Inputs smaller & neat */
+    .ui-compact .form-control,
+    .ui-compact .form-select {
+        height: 36px;
+        padding: .35rem .5rem;
+        font-size: 14px;
+        border-radius: 8px
+    }
+
+    .ui-compact .form-check-input {
+        width: 16px;
+        height: 16px;
+        margin-top: .2rem
+    }
+
+    .ui-compact .form-check-label {
+        font-size: 14px
+    }
+
+    .section-label {
+        font-size: 14px;
+        margin-bottom: .4rem
+    }
+
+    .amen-stack .form-check {
+        margin-bottom: .25rem
+    }
+
+    /* Upload area */
+    .upload-area {
+        min-height: 120px;
+        border: 1px dashed #cfd6e4;
+        border-radius: 10px;
+        padding: 10px;
+        background: #fafbfc
+    }
+
+    .upload-area:hover {
+        background: #f5f7fb;
+        border-color: #8fb4ff
+    }
+
+    /* Photo upload styles */
+    .photo-requirements {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        border-left: 4px solid #0d6efd;
+    }
+
+    .photo-requirements h6 {
+        color: #495057;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+
+    .photo-requirements ul li {
+        margin-bottom: 8px;
+        font-size: 0.9rem;
+    }
+
+    .photo-requirements ul li i {
+        font-size: 0.8rem;
+    }
+
+    /* Main photo preview with dark overlay */
+    .photo-container {
+        position: relative;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        background: #2c3e50;
+    }
+
+    .photo-container img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        filter: brightness(0.8);
+    }
+
+    .photo-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 15px;
+        color: white;
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+
+    .overlay-left {
+        flex: 1;
+        text-align: left;
+    }
+
+    .overlay-right {
+        flex: 1;
+        text-align: right;
+    }
+
+    .overlay-divider {
+        width: 1px;
+        height: 20px;
+        background: rgba(255, 255, 255, 0.5);
+        margin: 0 15px;
+    }
+
+    .preview-btn,
+    .change-btn {
+        cursor: pointer;
+        padding: 5px 10px;
+        border-radius: 4px;
+        transition: all 0.2s ease;
+    }
+
+    .preview-btn:hover {
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .change-btn:hover {
+        background: rgba(13, 110, 253, 0.2);
+    }
+
+    /* Delete button styling */
+    .delete-link {
+        cursor: pointer;
+        padding: 5px 10px;
+        border-radius: 4px;
+        transition: all 0.2s ease;
+        color: #dc3545 !important;
+    }
+
+    .delete-link:hover {
+        background: rgba(220, 53, 69, 0.2);
+        color: #dc3545 !important;
+    }
+
+    /* Upload zone styling */
+    .upload-drop-zone {
+        border: 2px dashed #dee2e6;
+        border-radius: 8px;
+        padding: 30px 20px;
+        text-align: center;
+        background: #f8f9fa;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        min-height: 120px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .upload-drop-zone:hover {
+        border-color: #0d6efd;
+        background: #f0f8ff;
+    }
+
+    .upload-drop-zone.dragover {
+        border-color: #0d6efd;
+        background: #e3f2fd;
+    }
+
+    .upload-drop-zone i {
+        color: #6c757d;
+        margin-bottom: 10px;
+    }
+
+    .upload-drop-zone p {
+        color: #0d6efd;
+        font-weight: 500;
+        margin: 0;
+        font-size: 0.9rem;
+    }
+
+    /* Photo thumbnails */
+    .photo-thumbnail {
+        border: 1px solid #e9ecef;
+        border-radius: 6px;
+        overflow: hidden;
+        margin-bottom: 10px;
+    }
+
+    .photo-thumbnail img {
+        transition: transform 0.2s ease;
+    }
+
+    .photo-thumbnail:hover img {
+        transform: scale(1.05);
+    }
+
+    /* Modal thumbnails */
+    .modal-thumbnail {
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        padding: 12px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        background: #fff;
+        position: relative;
+    }
+
+    .modal-thumbnail:hover {
+        border-color: #0d6efd;
+        background: #f8f9fa;
+    }
+
+    .modal-thumbnail.active {
+        border-color: #0d6efd;
+        background: #e3f2fd;
+        box-shadow: 0 0 0 1px #0d6efd;
+    }
+
+    .modal-thumbnail img {
+        width: 100%;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 6px;
+        display: block;
+    }
+
+    .modal-thumbnail .thumbnail-info {
+        margin-top: 8px;
+    }
+
+    .modal-thumbnail .thumbnail-info small {
+        display: block;
+        font-size: 0.8rem;
+        color: #6c757d;
+        line-height: 1.2;
+    }
+
+    .modal-thumbnail .remove-btn {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        background: rgba(220, 53, 69, 0.9);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        font-size: 0.8rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color 0.2s ease;
+    }
+
+    .modal-thumbnail .remove-btn:hover {
+        background: rgba(220, 53, 69, 1);
+    }
+
+    /* === BẮT ĐẦU KHỐI CODE THAY THẾ === */
+
+    /* Tiles – 2 trạng thái: empty | has-photo */
+    .photo-tile {
+        position: relative;
+        border-radius: 10px;
+        overflow: hidden;
+        background: #f0f2f5;
+        /* Màu nền cho khung */
+    }
+
+    /* Khung ảnh chính, đã được thu nhỏ và căn giữa */
+    .photo-tile.large {
+        max-width: 380px;
+        /* Giới hạn chiều rộng tối đa, bạn có thể chỉnh số này */
+        height: 220px;
+        /* Đặt chiều cao cố định để layout ổn định */
+        margin: 0 auto;
+        /* Tự động căn giữa khung ảnh theo chiều ngang */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #eef1f5;
+        /* Thêm viền mỏng cho đẹp hơn */
+    }
+
+    /* Đảm bảo ảnh bên trong hiển thị đúng tỷ lệ và không bị cắt */
+    .photo-tile img {
+        max-width: 100%;
+        max-height: 100%;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+        /* Rất quan trọng: Hiển thị toàn bộ ảnh, không cắt xén */
+        display: block;
+        filter: brightness(1);
+        transition: filter 0.3s ease;
+    }
+
+    /* === KẾT THÚC KHỐI CODE THAY THẾ === */
+
+    /* Tìm đến .photo-tile.has-photo và thêm các hiệu ứng khi hover */
+    .photo-tile.has-photo:hover img {
+        filter: brightness(0.5);
+        /* Làm ảnh tối đi khi hover */
+    }
+
+    .photo-tile.has-photo:hover .tile-overlay {
+        opacity: 1;
+        /* Hiện lớp overlay lên khi hover */
+    }
+
+    /* Tùy chỉnh lớp overlay cho giống mẫu */
+    .tile-overlay {
+        position: absolute;
+        /* Các thuộc tính top, left, right, bottom đã có sẵn */
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 14px;
+        color: #fff;
+        font-weight: 600;
+        /* Xóa background gradient và thay bằng màu đen mờ */
+        background: rgba(0, 0, 0, 0.4);
+        /* THAY ĐỔI dòng này */
+        opacity: 0;
+        /* Mặc định ẩn đi */
+        transition: opacity .3s ease;
+        /* Thêm hiệu ứng chuyển động */
+    }
+
+    /* Giữ nguyên style cho các link và divider */
+    .tile-overlay a {
+        color: #fff;
+        text-decoration: none;
+        padding: 6px 12px;
+        border-radius: 6px;
+        border: 1px solid rgba(255, 255, 255, 0.7);
+        /* Thêm viền trắng mờ */
+        background: rgba(255, 255, 255, 0.1);
+        /* Thêm nền mờ */
+    }
+
+    .tile-overlay a:hover {
+        background: rgba(255, 255, 255, 0.2);
+    }
+
+    .tile-overlay .divider {
+        width: 1px;
+        height: 20px;
+        background: rgba(255, 255, 255, 0.5);
+    }
+
+    /* Trạng thái rỗng (giống ảnh #2) */
+    .photo-tile.empty {
+        border: 2px dashed #dee2e6;
+        background: #f8f9fa;
+        /* Màu nền nhạt hơn cho trạng thái rỗng */
+    }
+
+    .photo-tile.empty .upload-placeholder {
+        text-align: center;
+        color: #6c757d;
+    }
+
+    .photo-tile.empty .title {
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .photo-tile.empty .upload-link {
+        color: #0d6efd;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 500;
+    }
+
+    .photo-tile.empty img {
+        display: none;
+    }
+
+    .photo-tile.empty .tile-overlay {
+        display: none;
+    }
+
+    .photo-tile .upload-placeholder i {
+        font-size: 28px;
+        color: #6c757d;
+        margin-bottom: 8px;
+    }
+
+    .photo-tile .upload-placeholder .title {
+        font-size: 14px;
+        font-weight: 600;
+        color: #495057;
+        margin-bottom: 8px;
+    }
+
+    .photo-tile .upload-placeholder .upload-link {
+        color: #0d6efd;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 500;
+    }
+
+    /* Trạng thái có ảnh */
+    .photo-tile.has-photo {
+        border: 1px solid #eef1f5;
+        background: #fff;
+    }
+
+    .photo-tile.has-photo img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+
+    .photo-tile.has-photo .upload-placeholder {
+        display: none;
+    }
+
+    .photo-tile.has-photo .tile-overlay {
+        display: flex;
+    }
+
+    /* placeholder trong khung rỗng */
+    .upload-placeholder {
+        color: #6b7a90;
+        padding: 28px 0;
+    }
+
+    .upload-placeholder .title {
+        font-weight: 600;
+        color: #2e3a4d;
+    }
+
+    .upload-placeholder .upload-link {
+        color: #0d6efd;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    /* Ô "Tải lên thêm ảnh" - UNIFIED STYLE */
+    .upload-drop-zone {
+        border: 2px dashed #d7e2f4;
+        background: #f8fbff;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    /* Button full width khi chưa có ảnh */
+    .upload-drop-zone.full-width {
+        min-height: 160px;
+        margin-bottom: 12px;
+    }
+
+    /* Button grid item khi đã có ảnh */
+    .upload-drop-zone.grid-item {
+        height: 120px;
+        border-radius: 8px;
+        background: #f8fbff;
+        border: 2px dashed #d7e2f4;
+        transition: all 0.2s ease;
+    }
+
+    .upload-drop-zone.grid-item:hover {
+        background: #f0f6ff;
+        border-color: #9bbcff;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .upload-drop-zone.grid-item i {
+        font-size: 20px;
+        color: #7a8aa8;
+        margin-bottom: 6px;
+    }
+
+    .upload-drop-zone.grid-item .text {
+        font-size: 0.8rem;
+        color: #0d6efd;
+        font-weight: 600;
+        text-align: center;
+        line-height: 1.1;
+    }
+
+    .upload-drop-zone:hover {
+        background: #f0f6ff;
+        border-color: #9bbcff;
+    }
+
+    .upload-drop-zone .text {
+        color: #0d6efd;
+        font-weight: 600;
+    }
+
+    /* Lưới thumbnail: 2 cột - luôn luôn 2 cột như Traveloka */
+    .gallery-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        /* Tăng gap từ 12px lên 16px để cân đối hơn */
+        align-items: start;
+        /* Căn đầu các items để đồng đều */
+    }
+
+    /* Mỗi thumbnail + dropdown */
+    .tile-wrap select.photo-cat {
+        margin-top: 8px;
+        /* Tăng margin từ 6px lên 8px */
+    }
+
+    /* Photo tile styling - UNIFIED STYLE FOR ALL PHOTOS */
+    .photo-tile {
+        position: relative;
+        border-radius: 10px;
+        overflow: hidden;
+        background: #f0f2f5;
+        transition: all 0.3s ease;
+        border: 1px solid #eef1f5;
+    }
+
+    /* Khung ảnh chính, đã được thu nhỏ và căn giữa */
+    .photo-tile.large {
+        max-width: 380px;
+        height: 220px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Ảnh khác trong grid - kích thước cố định giống ảnh phòng */
+    .gallery-grid .photo-tile {
+        height: 120px;
+        border-radius: 8px;
+        background: #f8f9fa;
+        border: 2px dashed #dee2e6;
+    }
+
+    /* Đảm bảo ảnh bên trong hiển thị đúng tỷ lệ và không bị cắt */
+    .photo-tile img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        filter: brightness(1);
+        transition: filter 0.3s ease;
+        border-radius: 8px;
+    }
+
+    /* Ảnh trong grid sử dụng cover để có size cố định */
+    .gallery-grid .photo-tile img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+
+    /* UNIFIED OVERLAY STYLE - SAME FOR ALL PHOTOS */
+    .tile-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 14px;
+        color: #fff;
+        font-weight: 600;
+        background: rgba(0, 0, 0, 0.7);
+        opacity: 0;
+        transition: opacity .3s ease;
+    }
+
+    /* Hover effect - SAME FOR ALL PHOTOS */
+    .photo-tile:hover img {
+        filter: brightness(0.5);
+    }
+
+    .photo-tile:hover .tile-overlay {
+        opacity: 1;
+    }
+
+    .tile-overlay a {
+        color: #fff;
+        text-decoration: none;
+        padding: 6px 12px;
+        border-radius: 6px;
+        border: 1px solid rgba(255, 255, 255, 0.7);
+        background: rgba(255, 255, 255, 0.1);
+        transition: all 0.2s ease;
+        font-size: 12px;
+    }
+
+    .tile-overlay a:hover {
+        background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Xóa CSS trùng lặp và responsive breakpoint */
+    /* Grid */
+    /* .gallery-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    @@media (min-width: 992px) {
+        .gallery-grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    } */
+
+    /* Add tile - làm nhỏ lại và cân đối với grid */
+    .add-tile {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        border: 2px dashed #d7e2f4 !important;
+        background: #f8fbff !important;
+        cursor: pointer !important;
+        height: 100px !important;
+        /* Giảm từ 120px xuống 100px để hẹp hơn */
+        border-radius: 8px !important;
+        /* Thêm bo góc */
+        transition: all 0.2s ease !important;
+        /* Thêm hiệu ứng mượt mà */
+        padding: 12px !important;
+        /* Thêm padding để nội dung không bị sát viền */
+
+        /* === THÊM/CHỈNH SỬA CÁC THUỘC TÍNH NÀY === */
+        width: 100% !important;
+        /* Đảm bảo nó không bị co lại quá mức nếu không có margin */
+        max-width: 200px !important;
+        /* Ví dụ: Giới hạn chiều rộng tối đa là 200px */
+        margin: 0 auto !important;
+        /* Căn giữa nếu nó hẹp hơn */
+    }
+
+    .add-tile:hover {
+        background: #f0f6ff;
+        border-color: #9bbcff;
+        transform: translateY(-2px);
+        /* Thêm hiệu ứng nâng lên khi hover */
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        /* Thêm bóng khi hover */
+    }
+
+    .add-tile i {
+        font-size: 20px;
+        /* Giảm từ 24px xuống 20px */
+        color: #7a8aa8;
+        margin-bottom: 6px;
+        /* Giảm margin từ 8px xuống 6px */
+    }
+
+    .add-tile .text {
+        font-size: 0.8rem;
+        /* Giảm từ 0.85rem xuống 0.8rem */
+        color: #0d6efd;
+        font-weight: 600;
+        text-align: center;
+        /* Căn giữa text */
+        line-height: 1.1;
+        /* Giảm line-height từ 1.2 xuống 1.1 */
+    }
+
+    /* Dropdown dưới mỗi ảnh */
+    .photo-cat {
+        margin-top: 6px;
+    }
+
+
+
+    /* Tabs style (flat, blue underline) */
+    .tabs-tera .nav-link {
+        border: none;
+        border-bottom: 2px solid transparent;
+        color: #6c757d;
+        font-weight: 500;
+        padding: .5rem .75rem
+    }
+
+    .tabs-tera .nav-link.active {
+        color: #0d6efd;
+        border-bottom-color: #0d6efd;
+        background: transparent
+    }
+
+    /* Sticky bottom action bar */
+    .action-bar {
+        position: sticky;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: #fff;
+        padding: 10px 0;
+        border-top: 1px solid #e9ecef;
+        z-index: 10
+    }
+
+    /* Fine-tune icons */
+    .display-6 {
+        font-size: 2.25rem
+    }
+
+    /* Error alert styling */
+    .alert {
+        margin-bottom: 1rem;
+        border-radius: 8px;
+        border: none;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .alert-danger {
+        background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+        color: #721c24;
+        border-left: 4px solid #dc3545;
+    }
+
+    .alert .btn-close {
+        filter: invert(1) grayscale(100%) brightness(200%);
+    }
+
+    .alert i {
+        color: #dc3545;
+    }
+
+    /* Delete button styling */
+    .js-remove {
+        color: #dc3545 !important;
+        font-weight: 600;
+        transition: all 0.2s ease;
+    }
+
+    .js-remove:hover {
+        color: #c82333 !important;
+        background: rgba(220, 53, 69, 0.1);
+        text-decoration: none;
+    }
+
+    /* Amenity sections styling */
+    .amenity-section {
+        margin-bottom: 1.5rem;
+    }
+
+    .amenity-category-title {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #495057;
+        margin-bottom: 0.75rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid #e9ecef;
+    }
+
+    .amenity-category-title.text-muted {
+        color: #adb5bd !important;
+    }
+
+    .amenity-category-title i {
+        color: #0d6efd;
+    }
+
+    .amenity-category-title.text-muted i {
+        color: #adb5bd !important;
+    }
+
+    .form-check {
+        padding-left: 1.5em;
+    }
+
+    .form-check-input:disabled {
+        opacity: 0.5;
+    }
+
+    .form-check-label.text-muted {
+        color: #adb5bd !important;
+    }
+
+    .amenity-note {
+        background: #f8f9fa;
+        border-left: 4px solid #0d6efd;
+        padding: 0.75rem 1rem;
+        border-radius: 0 0.375rem 0.375rem 0;
+    }
+
+    .amenity-note i {
+        color: #0d6efd;
+    }
+
+    /* Amenities scroll container */
+    .amenities-container {
+        scrollbar-width: thin;
+        scrollbar-color: #0d6efd #f8f9fa;
+    }
+
+    .amenities-container::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .amenities-container::-webkit-scrollbar-track {
+        background: #f8f9fa;
+        border-radius: 3px;
+    }
+
+    .amenities-container::-webkit-scrollbar-thumb {
+        background: #0d6efd;
+        border-radius: 3px;
+    }
+
+    .amenities-container::-webkit-scrollbar-thumb:hover {
+        background: #0056b3;
+    }
+
+    /* Vỏ bọc + khung giống ảnh trái */
+    .amenities-wrap {
+        border: 1px solid #eef1f5;
+        border-radius: 12px;
+        padding: 12px;
+        background: #fff;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        height: 600px;
+    }
+
+    /* Container tiện nghi với chiều cao cố định và cuộn được */
+    .amenities-container {
+        flex: 1;
+        overflow-y: auto;
+        padding-right: 8px;
+        margin-bottom: 20px;
+    }
+
+    /* Tùy chỉnh thanh cuộn */
+    .amenities-container::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .amenities-container::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 4px;
+    }
+
+    .amenities-container::-webkit-scrollbar-thumb {
+        background: #c1c1c1;
+        border-radius: 4px;
+    }
+
+    .amenities-container::-webkit-scrollbar-thumb:hover {
+        background: #a8a8a8;
+    }
+
+    /* Phần "Không phải tiện nghi" cố định */
+    .amenity-note {
+        position: sticky;
+        bottom: 0;
+        background-color: #fff;
+        padding: 1rem;
+        box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+        z-index: 10;
+        margin-top: 20px;
+        /* Đảm bảo không bị chồng lên */
+        border-top: 1px solid #e9ecef;
+        flex-shrink: 0;
+        position: relative;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid #eef1f5;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Thanh xanh dọc bên trái với bo góc */
+    .amenity-note::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        background: #0d6efd;
+        border-radius: 12px 0 0 12px;
+    }
+
+    /* Điều chỉnh padding để không bị đè lên thanh xanh */
+    .amenity-note .amenity-note-content {
+        padding-left: 20px;
+    }
+
+    /* Để bo góc phần đầu với màu nền xanh */
+    .card-header {
+        background-color: #f1f5f8;
+        /* Màu nền xanh */
+        border-radius: 10px 10px 0 0;
+        /* Bo góc trên */
+        padding: 15px;
+        /* Khoảng cách bên trong */
+        border-top: none;
+        border-right: none;
+        border-bottom: none;
+        position: relative;
+    }
+
+    /* Điều chỉnh card để bo góc hoàn hảo */
+    .card.card-slim {
+        border-radius: 10px;
+        overflow: hidden;
+        border: none;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Điều chỉnh khu vực chung, ẩm thực, dịch vụ */
+    .amenity-category-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: #495057;
+        margin-bottom: 10px;
+    }
+
+    /* Grid Layout */
+    .amenities-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        /* 2 cột cho các checkbox */
+        gap: 12px;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Cấu trúc chính cho tên mục */
+    .amenities-wrap .amenity-category-title {
+        text-align: left;
+    }
+
+    /* Cấu trúc checkbox: chia đôi thành hai cột */
+    .amenities-wrap .form-check {
+        display: inline-block;
+        width: 100%;
+        margin-bottom: 0.8rem;
+    }
+
+    /* Các mục checkbox sẽ được căn chỉnh đều */
+    .amenities-grid .form-check {
+        display: inline-block;
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+
+    /* Làm cho toàn bộ phần tiện nghi có thanh cuộn */
+    .amenities-wrap {
+        max-height: 500px;
+        overflow-y: auto;
+        padding-right: 8px;
+    }
+
+    /* Tùy chỉnh thanh cuộn */
+    .amenities-wrap::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .amenities-wrap::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 4px;
+    }
+
+    .amenities-wrap::-webkit-scrollbar-thumb {
+        background: #c1c1c1;
+        border-radius: 4px;
+    }
+
+    .amenities-wrap::-webkit-scrollbar-thumb:hover {
+        background: #a8a8a8;
+    }
+
+    /* Làm cho toàn bộ phần tiện nghi có thanh cuộn */
+    .amenities-wrap {
+        max-height: 500px;
+        overflow-y: auto;
+        padding-right: 8px;
+    }
+
+    /* Tùy chỉnh thanh cuộn */
+    .amenities-wrap::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .amenities-wrap::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 4px;
+    }
+
+    .amenities-wrap::-webkit-scrollbar-thumb {
+        background: #c1c1c1;
+        border-radius: 4px;
+    }
+
+    .amenities-wrap::-webkit-scrollbar-thumb:hover {
+        background: #a8a8a8;
+    }
+
+    /* Đảm bảo các tiêu đề category có cùng chiều cao và căn chỉnh */
+    .amenity-category-title {
+        font-size: .95rem;
+        font-weight: 600;
+        color: #495057;
+        min-height: 2.5rem;
+        display: flex;
+        align-items: center;
+        margin: 0;
+        padding-bottom: .4rem;
+        position: relative;
+    }
+
+    /* Căn chỉnh các mục checkbox để thẳng hàng */
+    .amenity-category-title+.form-check {
+        margin-top: .6rem;
+    }
+
+    .amenity-category-title i {
+        color: #0d6efd;
+    }
+
+    /* Điều chỉnh các phần tử checkbox cho đúng */
+    .form-check {
+        margin-bottom: 1rem;
+    }
+
+    .form-check-input {
+        width: 18px;
+        height: 18px;
+        margin-top: .25rem;
+        /* Căn chỉnh checkbox */
+    }
+
+    .form-check-label {
+        font-size: 14px;
+        margin-left: 10px;
+    }
+
+    /* Ẩn thanh scroll */
+    .amenities-grid {
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    .amenities-grid::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* Ghi đè style cũ để không bị "ảnh bên phải" */
+    .amenities-container {
+        all: unset;
+    }
+
+    /* Ẩn cột bên phải ở màn hình nhỏ - đã được xử lý bằng grid-template-columns: 1fr */
+
+    /* nếu còn class cũ trong trang khác */
+    /* Container tiện nghi với chiều cao cố định */
+    .amenities-container {
+        height: calc(100vh - 200px);
+        overflow-y: scroll;
+    }
+
+    /* Phần "Không phải tiện nghi" cố định ở dưới */
+    .amenity-note {
+        position: sticky;
+        bottom: 0;
+        background-color: #fff;
+        padding: 1rem;
+        box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+        z-index: 10;
+        margin-top: 1rem;
+        border-top: 1px solid #e9ecef;
+    }
+
+    /* Bo tròn phần yêu cầu ảnh giống ảnh trái */
+    .photo-requirements {
+        position: relative;
+        border-radius: 12px;
+        overflow: hidden;
+        background: #fff;
+        border: 1px solid #eef1f5;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Thanh xanh dọc bên trái với bo góc */
+    .photo-requirements::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        background: #0d6efd;
+        border-radius: 12px 0 0 12px;
+    }
+
+    /* Điều chỉnh padding để không bị đè lên thanh xanh */
+    .photo-requirements .card-body {
+        padding-left: 20px;
+    }
+
+    /* === CSS CHO MODAL XEM TRƯỚC ẢNH === */
+
+    /* Làm cho dialog chiếm toàn màn hình và căn giữa nội dung */
+    #photoPreviewModal .modal-dialog {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        margin: 0;
+    }
+
+    /* Xoá nền trắng, viền và bóng của modal mặc định */
+    #photoPreviewModal .modal-content {
+        background: transparent;
+        border: none;
+        box-shadow: none;
+    }
+
+    /* Thân modal sẽ chứa ảnh và các nút */
+    #photoPreviewModal .modal-body {
+        padding: 20px;
+    }
+
+    /* Giới hạn kích thước ảnh xem trước để không bị tràn màn hình */
+    #modalImagePreview {
+        max-width: 90vw;
+        /* Tối đa 90% chiều rộng màn hình */
+        max-height: 80vh;
+        /* Tối đa 80% chiều cao màn hình */
+        width: auto;
+        height: auto;
+        object-fit: contain;
+        border-radius: 8px;
+        /* Bo góc nhẹ cho ảnh */
+    }
+
+    /* Định dạng cho text kích thước ảnh */
+    #imageDimensions {
+        color: white;
+        font-size: 14px;
+        background: rgba(0, 0, 0, 0.5);
+        padding: 4px 8px;
+        border-radius: 4px;
+    }
+
+    /* Nút đóng tùy chỉnh giống Traveloka */
+    .btn-close-preview {
+        background: transparent;
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        color: white;
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+    }
+
+    .btn-close-preview:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+</style>
